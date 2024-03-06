@@ -1,0 +1,94 @@
+:root {
+  /* https://coolors.co/e8edeb-f6f8f2-f5cb5c-242423-333533 */
+  /* CSS HSL */
+  --antiflash-white: hsla(156, 12%, 92%, 1);
+  --baby-powder: hsla(80, 30%, 96%, 1);
+  --saffron: hsla(44, 88%, 66%, 1);
+  --eerie-black: hsla(60, 1%, 14%, 1);
+  --jet: hsla(120, 2%, 20%, 1);
+
+  --color-bg: var(--baby-powder);
+  --color-bg-muted: var(--antiflash-white);
+  --color-bg-special: var(--saffron);
+  --color-text: var(--eerie-black);
+  --color-text-muted: var(--jet);
+
+  --space-xs: 0.25rem;
+  --space-s: 0.5rem;
+  --space-m: 1rem;
+  --space-l: 1.5rem;
+  --space-xl: 2rem;
+  --space-xxl: 3rem;
+
+  --container-width-xs: 256px;
+  --container-width-s: 480px;
+  --container-width: 860px;
+
+  --border-radius: 8px;
+  --border-width: 2px;
+}
+
+body {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  min-height: 100vh;
+  background-color: var(--color-bg);
+  color: var(--color-text);
+  overflow-x: hidden;
+  box-sizing: border-box;
+}
+
+footer {
+  /* https://css-generators.com/custom-borders/ */
+  --mask: radial-gradient(30px at top, #0000 97%, #000) 50% / 55.5px 100%;
+
+  background-color: var(--color-bg-muted);
+  margin-top: var(--space-l);
+  padding: calc(var(--space-xl) * 2) 0 var(--space-xl);
+  -webkit-mask: var(--mask);
+  mask: var(--mask);
+}
+
+body,
+.container {
+  --padding: var(--space-m);
+
+  margin-left: auto;
+  margin-right: auto;
+  padding: 0 var(--padding);
+  max-width: var(--container-width);
+}
+
+main {
+  flex: 1 0 auto;
+}
+
+video {
+  display: block;
+  max-width: 100%;
+}
+
+[data-full-bleed] {
+  margin-left: calc(50% - 50vw);
+  width: 100vw;
+}
+
+[data-sr-only] {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}
+
+@media screen and (min-width: 860px) {
+  body,
+  .container {
+    --padding: 0;
+  }
+}

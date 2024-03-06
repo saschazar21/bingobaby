@@ -1,0 +1,16 @@
+.circle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: var(--border-width) solid currentColor;
+  border-radius: 9999px;
+  padding: var(--space-s);
+  background-color: var(--bg-color, transparent);
+  aspect-ratio: 1;
+  overflow: hidden;
+}
+
+.circle > svg {
+  width: var(--width, var(--space-xl));
+  height: var(--height, var(--width, var(--space-xl)));
+}

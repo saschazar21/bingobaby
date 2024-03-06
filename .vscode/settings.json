@@ -1,0 +1,17 @@
+{
+  "deno.enablePaths": [
+    "netlify/edge-functions",
+    ".netlify/edge-functions-dist",
+    "./app/deno"
+  ],
+  "deno.importMap": ".netlify/edge-functions-import-map.json",
+  "deno.unstable": true,
+  "deno.suggest.imports.autoDiscover": true,
+  "deno.suggest.imports.hosts": {
+    "https://deno.land": true,
+    "https://esm.sh": true
+  },
+  "[typescript]": {
+    "editor.defaultFormatter": "denoland.vscode-deno"
+  }
+}

@@ -1,0 +1,131 @@
+@font-face {
+  font-family: "Inter";
+  font-weight: 300;
+  src: url("/fonts/Inter-Light.ttf") format("truetype");
+  font-display: swap;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "Inter";
+  font-weight: 600;
+  src: url("/fonts/Inter-SemiBold.ttf") format("truetype");
+  font-display: swap;
+  font-style: normal;
+}
+
+:root {
+  --font-sans: "Inter", -apple-system, BlinkMacSystemFont, avenir next, avenir,
+    segoe ui, helvetica neue, helvetica, Cantarell, Ubuntu, roboto, noto, arial,
+    sans-serif;
+  --font-serif: Iowan Old Style, Apple Garamond, Baskerville, Times New Roman,
+    Droid Serif, Times, Source Serif Pro, serif, Apple Color Emoji,
+    Segoe UI Emoji, Segoe UI Symbol;
+  --font-mono: Menlo, Consolas, Monaco, Liberation Mono, Lucida Console,
+    monospace;
+
+  /* https://www.fluid-type-scale.com */
+  --fs-sm: clamp(0.83rem, 0.21vw + 0.78rem, 0.95rem);
+  --fs-base: clamp(1rem, 0.34vw + 0.91rem, 1.19rem);
+  --fs-md: clamp(1.2rem, 0.52vw + 1.07rem, 1.48rem);
+  --fs-lg: clamp(1.44rem, 0.76vw + 1.25rem, 1.86rem);
+  --fs-xl: clamp(1.73rem, 1.08vw + 1.46rem, 2.32rem);
+  --fs-xxl: clamp(2.07rem, 1.5vw + 1.7rem, 2.9rem);
+  --fs-xxxl: clamp(2.49rem, 2.06vw + 1.97rem, 3.62rem);
+
+  --font-weight-normal: 300;
+  --font-weight-bold: 600;
+
+  --lh-normal: 1;
+  --lh-extended: 1.5;
+
+  --ls-extended: 0.333ch;
+
+  --duration: 300ms;
+}
+
+html {
+  font-size: 16px;
+}
+
+body {
+  font-family: var(--font-sans);
+  font-size: var(--fs-base);
+  font-weight: var(--font-weight-normal);
+  line-height: var(--lh-extended);
+}
+
+:where(h1, h2, h3, h4, h5, h6, b, strong) {
+  font-weight: var(--font-weight-bold);
+}
+
+h1 {
+  font-size: var(--fs-xxxl);
+}
+
+h2 {
+  font-size: var(--fs-xxl);
+}
+
+h3 {
+  font-size: var(--fs-xl);
+}
+
+h4 {
+  font-size: var(--fs-lg);
+}
+
+h5 {
+  font-size: var(--fs-md);
+}
+
+h6 {
+  font-size: var(--fs-base);
+}
+
+:where(.lead) {
+  font-size: var(--fs-md);
+}
+
+:where(small, .small) {
+  font-size: var(--fs-sm);
+}
+
+::selection {
+  background-color: var(--color-bg-special);
+}
+
+::placeholder {
+  opacity: 0.4;
+  font-weight: var(--font-weight-normal);
+}
+
+:disabled {
+  --color-bg: var(--color-bg-muted);
+  --color-text: var(--color-text-muted);
+}
+
+:focus {
+  outline: var(--border-width) dotted var(--color-text-muted);
+  outline-offset: var(--border-width);
+}
+
+:where(input, button) {
+  border: var(--border-width) solid var(--border-color, var(--color-text));
+  border-radius: var(--border-radius);
+  padding: var(--space-s) var(--space-m);
+  font-family: inherit;
+  font-weight: var(--font-weight-bold);
+  font-size: 1rem;
+  background-color: var(--color-bg);
+  color: var(--color-text);
+  transition: background-color var(--duration) ease-in,
+    color var(--duration) ease-in;
+}
+
+button {
+  --color-bg: var(--color-bg-special);
+
+  text-transform: uppercase;
+  letter-spacing: var(--ls-extended);
+}

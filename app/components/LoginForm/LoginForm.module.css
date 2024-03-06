@@ -1,0 +1,33 @@
+.form {
+  --padding: var(--space-m);
+
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: var(--space-s);
+  padding: var(--padding);
+  margin: 0 auto;
+  width: 100%;
+  max-width: var(--container-width-s);
+  z-index: 1;
+}
+
+.heading {
+  font-size: var(--fs-l);
+  text-transform: uppercase;
+  text-align: center;
+  letter-spacing: var(--ls-extended);
+  color: var(--color-text-muted);
+}
+
+.submit {
+  --color-bg: var(--color-text-muted);
+  --color-text: var(--color-bg-special);
+  --border-color: var(--color-bg);
+}
+
+@media screen and (min-width: 640px) {
+  .form {
+    --padding: var(--space-l);
+  }
+}

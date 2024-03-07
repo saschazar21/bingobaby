@@ -3,6 +3,7 @@ import {
   LinksFunction,
   LoaderFunction,
   MetaFunction,
+  json,
 } from "@netlify/remix-runtime";
 import { cssBundleHref } from "@remix-run/css-bundle";
 import {
@@ -15,7 +16,9 @@ import {
 } from "@remix-run/react";
 import { Footer } from "@/components/Footer";
 import { BirthdateContext } from "@/contexts/BirthdateContext";
+import { SessionContext } from "@/contexts/SessionContext";
 import { dateObject } from "@/utils/day";
+import { destroySession, getSession } from "@/utils/session";
 
 import pkg from "../package.json";
 
@@ -26,9 +29,25 @@ export const links: LinksFunction = () => [
   ...(cssBundleHref ? [{ rel: "stylesheet", href: cssBundleHref }] : []),
 ];
 
-export const loader: LoaderFunction = () => ({
-  ENV: { CALCULATED_BIRTHDATE: process.env.CALCULATED_BIRTHDATE },
-});
+export const loader: LoaderFunction = async ({ request }) => {
+  const session = await getSession(request.headers.get("cookie"));
+
+  const values = {
+    ENV: { CALCULATED_BIRTHDATE: process.env.CALCULATED_BIRTHDATE },
+  };
+
+  if (!session.has("name")) {
+    return json(values, {
+      headers: {
+        "set-cookie": await destroySession(session),
+      },
+    });
+  }
+
+  const { data } = session;
+
+  return { session: data, ...values };
+};
 
 export const meta: MetaFunction = () => [
   { title: pkg.short_name },
@@ -71,10 +90,12 @@ export default function App() {
         <Links />
       </head>
       <body>
-        <BirthdateContext.Provider value={date}>
-          <Outlet />
-          <Footer />
-        </BirthdateContext.Provider>
+        <SessionContext.Provider value={data?.session ?? null}>
+          <BirthdateContext.Provider value={date}>
+            <Outlet />
+            <Footer />
+          </BirthdateContext.Provider>
+        </SessionContext.Provider>
         <ScrollRestoration />
         <Scripts />
       </body>

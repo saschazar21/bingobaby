@@ -48,15 +48,15 @@
 }
 
 .submit {
-  --color-bg: var(--color-text-muted);
-  --color-text: var(--color-bg-special);
-  --border-color: var(--color-bg);
+  --button-bg-color: var(--color-text-muted);
+  --button-color: var(--color-bg-special);
+  --border-color: var(--button-bg-color);
 }
 
 .submit:disabled {
-  --color-bg: var(--color-bg-muted);
-  --color-text: var(--color-text-muted);
-  --border-color: var(--color-text);
+  --button-bg-color: var(--color-bg-muted);
+  --button-color: var(--color-text-muted);
+  --border-color: var(--button-bg-color);
 }
 
 @media screen and (min-width: 640px) {

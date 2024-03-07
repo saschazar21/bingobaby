@@ -110,7 +110,38 @@ h6 {
   outline-offset: var(--border-width);
 }
 
-:where(input, button) {
+:is(a, a:hover, a:focus, a:visited) {
+  --color: var(--link-color, var(--color-text));
+
+  position: relative;
+  color: var(--color);
+  line-height: var(--line-height, 1);
+  text-decoration: none;
+}
+
+a::after,
+a::before {
+  content: "";
+  position: absolute;
+  border-bottom: var(--border-width) dotted var(--color);
+  height: var(--border-width);
+  bottom: calc(var(--space-s) * -1);
+  left: 0;
+  width: 0;
+}
+
+a:hover::after,
+a::before {
+  width: 100%;
+}
+
+a::after {
+  border-bottom-style: solid;
+  transition: width var(--duration) ease-in;
+}
+
+:where(input, button),
+a.button {
   border: var(--border-width) solid var(--border-color, var(--color-text));
   border-radius: var(--border-radius);
   padding: var(--space-s) var(--space-m);
@@ -121,12 +152,19 @@ h6 {
   background-color: var(--color-bg);
   color: var(--color-text);
   transition: background-color var(--duration) ease-in,
-    color var(--duration) ease-in;
+    color var(--duration) ease-in, border-color var(--duration) ease-in;
 }
 
-button {
-  --color-bg: var(--color-bg-special);
-
+button,
+a.button {
+  background-color: var(--button-bg-color, var(--color-bg-special));
+  color: var(--button-color, var(--color-text));
   text-transform: uppercase;
   letter-spacing: var(--ls-extended);
+  line-height: inherit;
+}
+
+a.button::before,
+a.button::after {
+  display: none;
 }

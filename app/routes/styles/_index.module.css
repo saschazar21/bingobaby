@@ -2,11 +2,8 @@
   --padding: 0;
 
   position: relative;
-  background-color: var(--color-bg-special);
-}
-
-.bottomContainer {
   margin-top: var(--space-l);
+  background-color: var(--color-bg-special);
 }
 
 .icons {
@@ -26,44 +23,11 @@
   --bg-color: var(--color-bg-special);
 }
 
-.baby {
-  display: none;
-}
-
 @media screen and (min-width: 640px) {
-  .container[data-header] {
-    display: flex;
-    align-items: stretch;
-    border-top-left-radius: unset;
-    border-top-right-radius: unset;
-  }
-
-  .login {
-    flex: 0 0 auto;
-
-    position: relative;
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-end;
-    max-width: var(--container-width-xs);
-    overflow: hidden;
-  }
-
   .icons {
     --width: calc(var(--fs-xxxl) * 1.25);
     --gap: var(--space-l);
     --margin: var(--space-xl);
-  }
-
-  .baby {
-    position: absolute;
-    display: block;
-    top: var(--space-xl);
-    left: 45%;
-    width: 61.8%;
-    transform: rotate(33deg) translateX(-50%) scale(1.33);
-    transform-origin: 0 50%;
-    opacity: 0.2;
   }
 }
 

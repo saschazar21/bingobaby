@@ -20,10 +20,43 @@
   color: var(--color-text-muted);
 }
 
+.wrapper {
+  position: relative;
+}
+
+.error {
+  position: absolute;
+  display: block;
+  border-radius: var(--border-radius);
+  padding: var(--space-s) var(--space-m);
+  bottom: calc(100% + var(--space-xs));
+  left: 0;
+  width: 100%;
+  background-color: var(--color-alert);
+  color: var(--color-bg-muted);
+  font-weight: var(--font-weight-bold);
+}
+
+.error::before {
+  content: "";
+  position: absolute;
+  border: var(--space-s) solid transparent;
+  border-top-color: var(--color-alert);
+  width: var(--space-m);
+  top: 100%;
+  right: var(--space-m);
+}
+
 .submit {
   --color-bg: var(--color-text-muted);
   --color-text: var(--color-bg-special);
   --border-color: var(--color-bg);
+}
+
+.submit:disabled {
+  --color-bg: var(--color-bg-muted);
+  --color-text: var(--color-text-muted);
+  --border-color: var(--color-text);
 }
 
 @media screen and (min-width: 640px) {

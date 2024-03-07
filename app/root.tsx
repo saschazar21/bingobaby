@@ -1,5 +1,10 @@
 import { useMemo } from "react";
-import { LoaderFunction, MetaFunction } from "@remix-run/deno";
+import {
+  LinksFunction,
+  LoaderFunction,
+  MetaFunction,
+} from "@netlify/remix-runtime";
+import { cssBundleHref } from "@remix-run/css-bundle";
 import {
   Links,
   Meta,
@@ -16,6 +21,10 @@ import pkg from "../package.json";
 
 import "@/styles/_typography.css";
 import "@/styles/_base.css";
+
+export const links: LinksFunction = () => [
+  ...(cssBundleHref ? [{ rel: "stylesheet", href: cssBundleHref }] : []),
+];
 
 export const loader: LoaderFunction = () => ({
   ENV: { CALCULATED_BIRTHDATE: process.env.CALCULATED_BIRTHDATE },

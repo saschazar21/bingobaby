@@ -1,4 +1,4 @@
-import { createCookie } from "@remix-run/deno";
+import { createCookie } from "@netlify/remix-runtime";
 import { ONE_WEEK } from "./day";
 
 export const SESSION_COOKIE_EXPIRE_DURATION = ONE_WEEK;

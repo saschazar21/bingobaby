@@ -1,11 +1,10 @@
 [build]
-command = "yarn build"
-publish = "build/client"
+command = "npm run build"
+publish = "public"
 
 [dev]
 autoLaunch = false
-command = "yarn dev"
-framework = "vite"
+framework = "#static"
 
 # Set immutable caching for static files, because they have fingerprinted filenames
 

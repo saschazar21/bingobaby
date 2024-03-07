@@ -12,11 +12,11 @@ END$$;
 /*
 Create tables if not exist
 */
-CREATE TABLE users IF NOT EXISTS (
+CREATE TABLE IF NOT EXISTS users (
     name TEXT PRIMARY KEY
 );
 
-CREATE TABLE browsers IF NOT EXISTS (
+CREATE TABLE IF NOT EXISTS browsers (
     user_agent TEXT PRIMARY KEY,
     name TEXT,
     version TEXT,
@@ -25,19 +25,19 @@ CREATE TABLE browsers IF NOT EXISTS (
     created_at TIMESTAMP DEFAULT now()
 );
 
-CREATE TABLE sessions IF NOT EXISTS (
+CREATE TABLE IF NOT EXISTS sessions (
     id TEXT PRIMARY KEY,
     name TEXT REFERENCES users(name) ON DELETE CASCADE,
+    error TEXT,
     active BOOLEAN DEFAULT true,
     browser TEXT REFERENCES browsers(user_agent) ON DELETE SET NULL,
-    flash TEXT,
     created_at TIMESTAMP DEFAULT now(),
     updated_at TIMESTAMP
 );
 
-CREATE TABLE guesses (
+CREATE TABLE IF NOT EXISTS guesses (
     id TEXT PRIMARY KEY,
-    name TEXT REFERENCES users(name) ON DELETE CASCADE,
+    name TEXT REFERENCES users(name) ON DELETE CASCADE NOT NULL,
     date TIMESTAMP NOT NULL,
     sex sex NOT NULL,
     created_at TIMESTAMP DEFAULT now(),
@@ -72,3 +72,17 @@ CREATE TRIGGER set_default_guesses_updated_at_trigger
     FOR EACH ROW
     WHEN (NEW.updated_at IS NULL)
     EXECUTE FUNCTION set_default_updated_at();
+
+/*
+Function and trigger for expire old sessions
+*/
+CREATE OR REPLACE FUNCTION expire_old_sessions() RETURNS TRIGGER AS $$
+BEGIN
+    UPDATE sessions SET active = false, updated_at = NOW() WHERE created_at < NOW() - INTERVAL '1 week';
+    RETURN NEW;
+END
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER expire_old_sessions_trigger
+    AFTER INSERT ON sessions
+    EXECUTE PROCEDURE expire_old_sessions();

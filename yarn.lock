@@ -1693,13 +1693,10 @@
     "@pnpm/network.ca-file" "^1.0.1"
     config-chain "^1.1.11"
 
-"@remix-run/deno@^2.8.0":
+"@remix-run/css-bundle@^2.8.0":
   version "2.8.0"
-  resolved "https://registry.yarnpkg.com/@remix-run/deno/-/deno-2.8.0.tgz#e0cf123bebf15631d75041031b1b345730996718"
-  integrity sha512-cNJo0tzF6bu4zSgP43L5nPdZH85cJamowILzGQ85LCSnwceff3RS6BIz6xBtMxlt1SaEtzJtxeYVL6hjAyep4A==
-  dependencies:
-    "@remix-run/server-runtime" "2.8.0"
-    mime "^3.0.0"
+  resolved "https://registry.yarnpkg.com/@remix-run/css-bundle/-/css-bundle-2.8.0.tgz#ecd576ee6b2d476517694ca7e9de91513124a828"
+  integrity sha512-QGZ9i99qQNeRt9ophHtF2mMXNQFURlyogA75oMWbZfVxDt3kV6jjit+LTgQ3rxjOvu2Q81xNnb7rc7Mi/nnRSQ==
 
 "@remix-run/dev@^2.8.0":
   version "2.8.0"
@@ -2091,7 +2088,7 @@
   resolved "https://registry.yarnpkg.com/@types/ms/-/ms-0.7.34.tgz#10964ba0dee6ac4cd462e2795b6bebd407303433"
   integrity sha512-nG96G3Wp6acyAgJqGasjODb+acrI7KltPiRxzHPXnP3NgI28bpQDRv53olbqGXbfcgF5aiiHmO3xpwEpS5Ld9g==
 
-"@types/node@*":
+"@types/node@*", "@types/node@^20.11.24":
   version "20.11.24"
   resolved "https://registry.yarnpkg.com/@types/node/-/node-20.11.24.tgz#cc207511104694e84e9fb17f9a0c4c42d4517792"
   integrity sha512-Kza43ewS3xoLgCEpQrsT+xRo/EJej1y0kVYGiLFE1NEODXGzTfwiC6tXTLMQskn1X4/Rjlh0MQUvx9W+L9long==
@@ -5946,11 +5943,6 @@ globby@^13.0.0, globby@^13.1.1:
     ignore "^5.2.4"
     merge2 "^1.4.1"
     slash "^4.0.0"
-
-globrex@^0.1.2:
-  version "0.1.2"
-  resolved "https://registry.yarnpkg.com/globrex/-/globrex-0.1.2.tgz#dd5d9ec826232730cd6793a5e33a9302985e6098"
-  integrity sha512-uHJgbwAMwNFf5mLst7IWLNg14x1CkeqglJb/K3doi4dw6q2IvAAmM/Y81kevy83wP+Sst+nutFTYOGg3d1lsxg==
 
 gonzales-pe@^4.3.0:
   version "4.3.0"
@@ -11135,11 +11127,6 @@ ts-node@^10.9.1:
     v8-compile-cache-lib "^3.0.1"
     yn "3.1.1"
 
-tsconfck@^3.0.1:
-  version "3.0.2"
-  resolved "https://registry.yarnpkg.com/tsconfck/-/tsconfck-3.0.2.tgz#d8e279f7a049d55f207f528d13fa493e1d8e7ceb"
-  integrity sha512-6lWtFjwuhS3XI4HsX4Zg0izOI3FU/AI9EGVlPEUMDIhvLPMD4wkiof0WCoDgW7qY+Dy198g4d9miAqUHWHFH6Q==
-
 tsconfig-paths@^3.15.0:
   version "3.15.0"
   resolved "https://registry.yarnpkg.com/tsconfig-paths/-/tsconfig-paths-3.15.0.tgz#5299ec605e55b1abb23ec939ef15edaf483070d4"
@@ -11667,15 +11654,6 @@ vite-node@^1.2.0:
     pathe "^1.1.1"
     picocolors "^1.0.0"
     vite "^5.0.0"
-
-vite-tsconfig-paths@^4.2.1:
-  version "4.3.1"
-  resolved "https://registry.yarnpkg.com/vite-tsconfig-paths/-/vite-tsconfig-paths-4.3.1.tgz#28762938151e7c80aec9d70c57e65ddce43a576f"
-  integrity sha512-cfgJwcGOsIxXOLU/nELPny2/LUD/lcf1IbfyeKTv2bsupVbTH/xpFtdQlBmIP1GEK2CjjLxYhFfB+QODFAx5aw==
-  dependencies:
-    debug "^4.1.1"
-    globrex "^0.1.2"
-    tsconfck "^3.0.1"
 
 vite@^5.0.0, vite@^5.0.11:
   version "5.1.4"

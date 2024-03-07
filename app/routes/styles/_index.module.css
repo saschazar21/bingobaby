@@ -3,7 +3,6 @@
 
   position: relative;
   background-color: var(--color-bg-special);
-  overflow: hidden;
 }
 
 .bottomContainer {

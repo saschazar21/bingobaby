@@ -3,8 +3,7 @@ import {
   createSession,
   LoaderFunction,
   redirect,
-} from "@remix-run/deno";
-import { Database } from "@/deno/postgres";
+} from "@netlify/remix-runtime";
 import { parseBrowserDetails } from "@/utils/browser";
 import { SESSION_COOKIE_EXPIRE_DURATION } from "@/utils/cookie";
 import { commitSession, SessionData, SessionFlashData } from "@/utils/session";
@@ -30,15 +29,10 @@ export const action: ActionFunction = async ({ request }) => {
       throw new Error("Das Loginfeld muss ausgefüllt sein.");
     }
 
-    const db = new Database(process.env.POSTGRES_CONNECTION_STRING);
-
-    const result = await db.createSession(body.get("name") as string, browser);
-
-    if (!result?.id?.length) {
-      throw new Error("Der Loginversuch ist fehlgeschlagen.");
-    }
-
-    const session = createSession<SessionData>(result);
+    const session = createSession<Partial<SessionData>, SessionFlashData>({
+      name: body.get("name") as string,
+      browser,
+    });
 
     return redirect("/", {
       headers: {
@@ -48,7 +42,11 @@ export const action: ActionFunction = async ({ request }) => {
       },
     });
   } catch (e) {
-    const session = createSession<never, SessionFlashData>();
+    console.error(e);
+
+    const session = createSession<Partial<SessionData>, SessionFlashData>({
+      browser,
+    });
     session.flash("error", (e as Error).message);
 
     return redirect("/", {

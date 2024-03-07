@@ -13,8 +13,8 @@ SELECT * FROM ${USERS} WHERE ${USERS}.name = $1;
 `;
 
 export const CREATE_USER = `
-INSERT INTO ${USERS}
-SET name = $1
+INSERT INTO ${USERS} (name)
+VALUES ($1)
 ON CONFLICT (name) DO NOTHING
 RETURNING name;
 `;

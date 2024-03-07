@@ -1,6 +1,8 @@
 import { FieldProps, useField } from "informed";
 import { FC } from "react";
 
+import styles from "./Input.module.css";
+
 export interface UserProps {
   autoFocus?: boolean;
   className?: string;
@@ -11,10 +13,22 @@ export interface UserProps {
 export interface InputProps extends FieldProps<UserProps> {}
 
 export const Input: FC<InputProps> = (props) => {
-  const { render, informed } = useField<UserProps, string>({
+  const config = {
     type: "text",
     ...props,
-  });
+  };
 
-  return render(<input {...informed} />);
+  const { render, informed } = useField<UserProps, string>(config);
+
+  return render(
+    <div className={styles.wrapper}>
+      <input
+        type={config.type}
+        name={config.name}
+        id={config.id}
+        placeholder={config.placeholder}
+        {...informed}
+      />
+    </div>
+  );
 };

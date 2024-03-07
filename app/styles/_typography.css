@@ -114,6 +114,7 @@ h6 {
   border: var(--border-width) solid var(--border-color, var(--color-text));
   border-radius: var(--border-radius);
   padding: var(--space-s) var(--space-m);
+  width: 100%;
   font-family: inherit;
   font-weight: var(--font-weight-bold);
   font-size: 1rem;

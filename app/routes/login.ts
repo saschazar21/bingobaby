@@ -5,7 +5,7 @@ import {
   redirect,
 } from "@netlify/remix-runtime";
 import { parseBrowserDetails } from "@/utils/browser";
-import { SESSION_COOKIE_EXPIRE_DURATION } from "@/utils/cookie";
+import { redirectCookie, SESSION_COOKIE_EXPIRE_DURATION } from "@/utils/cookie";
 import { commitSession, SessionData, SessionFlashData } from "@/utils/session";
 
 export const action: ActionFunction = async ({ request }) => {
@@ -17,6 +17,10 @@ export const action: ActionFunction = async ({ request }) => {
       },
     });
   }
+
+  const redirectPath = await redirectCookie.parse(
+    request.headers.get("cookie"),
+  );
 
   const browser = parseBrowserDetails(
     request.headers.get("user-agent") as string,
@@ -34,12 +38,22 @@ export const action: ActionFunction = async ({ request }) => {
       browser,
     });
 
-    return redirect("/", {
-      headers: {
-        "set-cookie": await commitSession(session, {
-          expires: new Date(Date.now() + SESSION_COOKIE_EXPIRE_DURATION),
-        }),
-      },
+    return redirect(redirectPath ?? "/", {
+      headers: [
+        [
+          "set-cookie",
+          await commitSession(session, {
+            expires: new Date(Date.now() + SESSION_COOKIE_EXPIRE_DURATION),
+          }),
+        ],
+        [
+          "set-cookie",
+          await redirectCookie.serialize("", {
+            expires: new Date(0),
+            maxAge: 0,
+          }),
+        ],
+      ],
     });
   } catch (e) {
     console.error(e);

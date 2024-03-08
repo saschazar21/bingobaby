@@ -5,13 +5,24 @@
   display: flex;
   flex-direction: column;
   align-items: stretch;
-  border-top-left-radius: unset;
-  border-top-right-radius: unset;
   background-color: var(--color-bg-special);
+  overflow: hidden;
 }
 
 .baby {
   display: none;
+}
+
+.content {
+  --gap: var(--space-l);
+
+  flex: 1 0 auto;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  gap: var(--gap);
+  padding: var(--space-m);
 }
 
 @media screen and (min-width: 640px) {
@@ -31,12 +42,8 @@
   }
 
   .content {
-    flex: 1 0 auto;
+    --gap: var(--space-xl);
 
-    position: relative;
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-end;
     max-width: var(--container-width-xs);
     overflow: hidden;
   }
@@ -46,5 +53,7 @@
 @media screen and (min-width: 860px) {
   .container {
     border-radius: var(--border-radius);
+    border-top-left-radius: unset;
+    border-top-right-radius: unset;
   }
 }

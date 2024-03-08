@@ -5,6 +5,7 @@ import { LoginFormHook } from "@/contexts/LoginContext/useLoginForm";
 import styles from "./LoginForm.module.css";
 
 export interface LoginFormProps {
+  autoFocus?: boolean;
   prefix: string;
 }
 
@@ -27,7 +28,7 @@ export const LoginForm: FC<LoginFormProps> = (props) => {
         <input
           id={getPrefixedId("name")}
           name="name"
-          autoFocus
+          autoFocus={props.autoFocus ? true : undefined}
           required
           placeholder="Vorname Nachname"
           value={state.value}

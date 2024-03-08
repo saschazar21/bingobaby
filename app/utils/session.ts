@@ -1,5 +1,4 @@
 import { Database } from "@/deno/postgres";
-import { Session } from "@/deno/postgres/queries/sessions";
 import { createSessionStorage } from "@netlify/remix-runtime";
 import { sessionCookie } from "./cookie";
 import { Browser } from "./browser";

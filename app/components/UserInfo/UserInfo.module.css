@@ -26,9 +26,10 @@
 
   .info {
     flex-direction: column;
+    gap: var(--space-m);
   }
 
   .logout {
-    align-self: flex-start;
+    align-self: flex-end;
   }
 }

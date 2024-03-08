@@ -1,15 +1,5 @@
 import { SESSIONS } from "../types.d.ts";
 
-export interface Session {
-  id: string;
-  name?: string;
-  error?: string;
-  active: boolean;
-  browser?: string;
-  created_at: string;
-  updated_at: string;
-}
-
 export const ALL_SESSIONS = `
 SELECT * FROM ${SESSIONS} ORDER BY ${SESSIONS}.created_at DESC;
 `;

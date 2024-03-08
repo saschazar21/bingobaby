@@ -1,4 +1,4 @@
-import { redirect } from "@netlify/remix-runtime";
+import { json, redirect } from "@netlify/remix-runtime";
 import { parseBrowserDetails } from "./browser";
 import { commitSession, getSession } from "./session";
 import {
@@ -59,4 +59,22 @@ export const ensureLoggedIn = async (request: Request) => {
       ],
     });
   }
+
+  return session.get("name") as string;
+};
+
+export const getUser = async (request: Request) => {
+  const { pathname } = new URL(request.url);
+  const session = await getSession(request.headers.get("cookie"));
+
+  if (!session.has("name")) {
+    throw json({ error: "No valid session found." }, {
+      status: 401,
+      headers: {
+        "www-authenticate": `Basic realm=${pathname}, charset="UTF-8"`,
+      },
+    });
+  }
+
+  return session.get("name") as string;
 };

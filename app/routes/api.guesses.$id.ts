@@ -46,7 +46,7 @@ const deleteGuess = async (data: Pick<Guess, "id" | "name">) => {
 };
 
 export const action: ActionFunction = async ({ request, params }) => {
-  if (params.id?.length) {
+  if (!params.id?.length) {
     throw json({ error: "ID der Schätzung muss angegeben werden." }, {
       status: 400,
     });
@@ -56,9 +56,9 @@ export const action: ActionFunction = async ({ request, params }) => {
 
   switch (request.method) {
     case "PUT":
-      return updateGuess(request, { id: params.id as string, name });
+      return updateGuess(request, { id: params.id, name });
     case "DELETE":
-      return deleteGuess({ id: params.id as string, name });
+      return deleteGuess({ id: params.id, name });
     default:
       throw json({ error: "Method Not Allowed." }, {
         status: 405,

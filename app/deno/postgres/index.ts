@@ -2,20 +2,23 @@ import { generate } from "https://deno.land/std@0.218.2/uuid/v1.ts";
 import { Client } from "https://deno.land/x/postgres@v0.19.2/mod.ts";
 import { CREATE_BROWSER } from "./queries/browsers.ts";
 import {
+  CREATE_GUESS,
+  DELETE_GUESS_BY_ID,
+  GUESS_BY_ID,
+  GUESSES_BY_NAME,
+  UPDATE_GUESS_BY_ID,
+  VALID_GUESSES,
+} from "./queries/guesses.ts";
+import {
   CREATE_SESSION,
   DELETE_SESSION_BY_ID,
   EXPIRE_SESSION_BY_ID,
+  SESSION_BY_ID,
   UPDATE_SESSION_BY_ID,
 } from "./queries/sessions.ts";
-import { Browser } from "../../utils/browser.ts";
-import { SESSION_BY_ID } from "./queries/sessions.ts";
-import { GUESSES_BY_NAME } from "./queries/guesses.ts";
 import { Guess, Session } from "./types.d.ts";
-import { CREATE_GUESS } from "./queries/guesses.ts";
-import { UPDATE_GUESS_BY_ID } from "./queries/guesses.ts";
-import { GUESS_BY_ID } from "./queries/guesses.ts";
-import { DELETE_GUESS_BY_ID } from "./queries/guesses.ts";
-import { VALID_GUESSES } from "./queries/guesses.ts";
+import { dateObject, LOCK_DATE } from "./utils.ts";
+import { Browser } from "../../utils/browser.ts";
 
 export class Database {
   private client: Client;
@@ -83,6 +86,14 @@ export class Database {
   }
 
   async createGuess(data: Omit<Guess, "id">) {
+    if (dateObject(new Date().toISOString()) > LOCK_DATE) {
+      throw new Error(
+        `Seit ${
+          LOCK_DATE.format("D. MMMM YYYY, HH:mm Uhr")
+        } werden keine neuen Schätzungen mehr akzeptiert.`,
+      );
+    }
+
     try {
       await this.client.connect();
 
@@ -129,6 +140,22 @@ export class Database {
   }
 
   async updateGuess(data: Partial<Guess> & Pick<Guess, "id" | "name">) {
+    if (dateObject(new Date().toISOString()) > LOCK_DATE) {
+      throw new Error(
+        `Seit ${
+          LOCK_DATE.format("D. MMMM YYYY HH:mm")
+        } Uhr werden keine Änderungen mehr akzeptiert.`,
+      );
+    }
+
+    if (
+      data.date && dateObject(data.date) < dateObject(new Date().toISOString())
+    ) {
+      throw new Error(
+        "Das Datum der Schätzung kann nicht in der Vergangenheit liegen.",
+      );
+    }
+
     try {
       await this.client.connect();
 
@@ -141,11 +168,21 @@ export class Database {
         [data.name],
       );
 
-      if (!guesses.some(({ id }) => id === data.id)) {
+      const guess = guesses.find(({ id }) => id === data.id);
+
+      if (!guess) {
         await transaction.rollback();
 
         throw new Error(
           "Die ID der Schätzung konnte dem Nutzer nicht zugeordnet werden.",
+        );
+      }
+
+      if (dateObject(guess.date) < dateObject(new Date().toISOString())) {
+        await transaction.rollback();
+
+        throw new Error(
+          "Eine bereits abgelaufene Schätzung kann nicht mehr verändert werden.",
         );
       }
 

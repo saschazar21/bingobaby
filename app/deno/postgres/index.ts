@@ -19,6 +19,7 @@ import {
 import { Guess, Session } from "./types.d.ts";
 import { dateObject, LOCK_DATE } from "./utils.ts";
 import { Browser } from "../../utils/browser.ts";
+import { SERVER_ERROR, ServerError } from "../../utils/error.ts";
 
 export class Database {
   private client: Client;
@@ -43,7 +44,7 @@ export class Database {
     } catch (e) {
       console.error(e);
 
-      throw new Error("Fehler beim Abrufen der Schätzung.");
+      throw new ServerError("Fehler beim Abrufen der Schätzung.");
     } finally {
       await this.client.end();
     }
@@ -61,7 +62,9 @@ export class Database {
     } catch (e) {
       console.error(e);
 
-      throw new Error("Fehler beim Abrufen der Schätzungen.");
+      throw (e.name === SERVER_ERROR)
+        ? e
+        : new ServerError("Fehler beim Abrufen der Schätzungen.");
     } finally {
       await this.client.end();
     }
@@ -77,7 +80,7 @@ export class Database {
     } catch (e) {
       console.error(e);
 
-      throw new Error(
+      throw (e.name === SERVER_ERROR) ? e : new ServerError(
         "Deine Schätzungen konnten nicht geladen werden.",
       );
     } finally {
@@ -87,10 +90,11 @@ export class Database {
 
   async createGuess(data: Omit<Guess, "id">) {
     if (dateObject(new Date().toISOString()) > LOCK_DATE) {
-      throw new Error(
+      throw new ServerError(
         `Seit ${
           LOCK_DATE.format("D. MMMM YYYY, HH:mm Uhr")
         } werden keine neuen Schätzungen mehr akzeptiert.`,
+        400,
       );
     }
 
@@ -109,8 +113,9 @@ export class Database {
       if (guesses.length >= 3) {
         await transaction.rollback();
 
-        throw new Error(
+        throw new ServerError(
           "Maximale Anzahl der erlaubten Schätzungen ist bereits erreicht.",
+          400,
         );
       }
 
@@ -124,7 +129,7 @@ export class Database {
       if (!rows.length ?? !rows[0]?.id) {
         await transaction.rollback();
 
-        throw new Error("Schätzung konnte nicht angelegt werden.");
+        throw new ServerError("Schätzung konnte nicht angelegt werden.");
       }
 
       await transaction.commit();
@@ -133,7 +138,9 @@ export class Database {
     } catch (e) {
       console.error(e);
 
-      throw new Error("Schätzung konnte nicht angelegt werden.");
+      throw (e.name === SERVER_ERROR)
+        ? e
+        : new ServerError("Schätzung konnte nicht angelegt werden.");
     } finally {
       await this.client.end();
     }
@@ -141,18 +148,20 @@ export class Database {
 
   async updateGuess(data: Partial<Guess> & Pick<Guess, "id" | "name">) {
     if (dateObject(new Date().toISOString()) > LOCK_DATE) {
-      throw new Error(
+      throw new ServerError(
         `Seit ${
           LOCK_DATE.format("D. MMMM YYYY HH:mm")
         } Uhr werden keine Änderungen mehr akzeptiert.`,
+        400,
       );
     }
 
     if (
       data.date && dateObject(data.date) < dateObject(new Date().toISOString())
     ) {
-      throw new Error(
+      throw new ServerError(
         "Das Datum der Schätzung kann nicht in der Vergangenheit liegen.",
+        400,
       );
     }
 
@@ -173,16 +182,18 @@ export class Database {
       if (!guess) {
         await transaction.rollback();
 
-        throw new Error(
+        throw new ServerError(
           "Die ID der Schätzung konnte dem Nutzer nicht zugeordnet werden.",
+          400,
         );
       }
 
       if (dateObject(guess.date) < dateObject(new Date().toISOString())) {
         await transaction.rollback();
 
-        throw new Error(
+        throw new ServerError(
           "Eine bereits abgelaufene Schätzung kann nicht mehr verändert werden.",
+          400,
         );
       }
 
@@ -196,7 +207,7 @@ export class Database {
       if (!rows.length ?? !rows[0]?.id) {
         await transaction.rollback();
 
-        throw new Error("Schätzung konnte nicht geändert werden.");
+        throw new ServerError("Schätzung konnte nicht geändert werden.");
       }
 
       await transaction.commit();
@@ -205,7 +216,9 @@ export class Database {
     } catch (e) {
       console.error(e);
 
-      throw new Error("Schätzung konnte nicht geändert werden.");
+      throw (e.name === SERVER_ERROR)
+        ? e
+        : new ServerError("Schätzung konnte nicht geändert werden.");
     } finally {
       await this.client.end();
     }
@@ -227,8 +240,9 @@ export class Database {
       if (!guesses.some(({ id }) => id === data.id)) {
         await transaction.rollback();
 
-        throw new Error(
+        throw new ServerError(
           "Die ID der Schätzung konnte dem Nutzer nicht zugeordnet werden.",
+          400,
         );
       }
 
@@ -242,7 +256,7 @@ export class Database {
       if (!rows.length ?? !rows[0]?.id) {
         await transaction.rollback();
 
-        throw new Error("Schätzung konnte nicht gelöscht werden.");
+        throw new ServerError("Schätzung konnte nicht gelöscht werden.");
       }
 
       await transaction.commit();
@@ -251,7 +265,9 @@ export class Database {
     } catch (e) {
       console.error(e);
 
-      throw new Error("Schätzung konnte nicht gelöscht werden.");
+      throw (e.name === SERVER_ERROR)
+        ? e
+        : new ServerError("Schätzung konnte nicht gelöscht werden.");
     } finally {
       await this.client.end();
     }
@@ -275,7 +291,7 @@ export class Database {
 
       if (!rows?.length) {
         await transaction.rollback();
-        throw new Error("Session not found.");
+        throw new ServerError("Session nicht gefunden.", 404);
       }
 
       if (rows[0].error) {
@@ -291,7 +307,9 @@ export class Database {
     } catch (e) {
       console.error(e);
 
-      throw new Error("Session nicht gefunden.");
+      throw (e.name === SERVER_ERROR)
+        ? e
+        : new ServerError("Session nicht gefunden.", 404);
     } finally {
       await this.client.end();
     }
@@ -326,7 +344,7 @@ export class Database {
 
       if (!session.length) {
         await transaction.rollback();
-        throw new Error("Failed to create session!");
+        throw new ServerError("Fehler beim Erstellen der Session.", 400);
       }
 
       await transaction.commit();
@@ -335,7 +353,7 @@ export class Database {
     } catch (e) {
       console.error(e);
 
-      throw new Error(
+      throw (e.name === SERVER_ERROR) ? e : new ServerError(
         "Der Loginversuch ist fehlgeschlagen. Bitte Vorname und Nachname kontrollieren.",
       );
     } finally {
@@ -354,14 +372,18 @@ export class Database {
       );
 
       if (!rows.length) {
-        throw new Error("Failed to update session!");
+        throw new ServerError(
+          "Der Updateversuch der Session ist fehlgeschlagen.",
+        );
       }
 
       return rows[0];
     } catch (e) {
       console.error(e);
 
-      throw new Error("Der Updateversuch der Session ist fehlgeschlagen.");
+      throw (e.name === SERVER_ERROR) ? e : new ServerError(
+        "Der Updateversuch der Session ist fehlgeschlagen.",
+      );
     } finally {
       await this.client.end();
     }

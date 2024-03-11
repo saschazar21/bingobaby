@@ -1,4 +1,5 @@
 import { Database } from "@/deno/postgres";
+import { ServerError } from "@/utils/error";
 import { json, LoaderFunction } from "@netlify/remix-runtime";
 
 export const loader: LoaderFunction = async () => {
@@ -11,6 +12,8 @@ export const loader: LoaderFunction = async () => {
   } catch (e) {
     console.error(e);
 
-    throw json({ error: (e as Error).message }, { status: 500 });
+    throw json({ error: (e as Error).message }, {
+      status: (e as ServerError).status ?? 500,
+    });
   }
 };

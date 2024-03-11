@@ -1,5 +1,6 @@
 import { Database } from "@/deno/postgres";
 import { Guess } from "@/deno/postgres/types";
+import { ServerError } from "@/utils/error";
 import { getUser } from "@/utils/login";
 import { ActionFunction, json, LoaderFunction } from "@netlify/remix-runtime";
 
@@ -27,7 +28,9 @@ const updateGuess = async (
   } catch (e) {
     console.error(e);
 
-    throw json({ error: (e as Error).message }, { status: 400 });
+    throw json({ error: (e as Error).message }, {
+      status: (e as ServerError).status ?? 500,
+    });
   }
 };
 
@@ -41,7 +44,9 @@ const deleteGuess = async (data: Pick<Guess, "id" | "name">) => {
   } catch (e) {
     console.error(e);
 
-    throw json({ error: (e as Error).message }, { status: 400 });
+    throw json({ error: (e as Error).message }, {
+      status: (e as ServerError).status ?? 500,
+    });
   }
 };
 

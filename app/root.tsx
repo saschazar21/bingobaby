@@ -1,4 +1,4 @@
-import { useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
 import {
   LinksFunction,
   LoaderFunction,
@@ -17,7 +17,7 @@ import {
 import { Footer } from "@/components/Footer";
 import { BirthdateContext } from "@/contexts/BirthdateContext";
 import { SessionContext } from "@/contexts/SessionContext";
-import { dateObject } from "@/utils/day";
+import { ONE_MINUTE, dateObject, lockDate } from "@/utils/day";
 import { destroySession, getSession } from "@/utils/session";
 
 import pkg from "../package.json";
@@ -33,7 +33,10 @@ export const loader: LoaderFunction = async ({ request }) => {
   const session = await getSession(request.headers.get("cookie"));
 
   const values = {
-    ENV: { CALCULATED_BIRTHDATE: process.env.CALCULATED_BIRTHDATE },
+    ENV: {
+      BIRTHDATE: process.env.BIRTHDATE,
+      CALCULATED_BIRTHDATE: process.env.CALCULATED_BIRTHDATE,
+    },
   };
 
   if (!session.has("name")) {
@@ -56,8 +59,35 @@ export const meta: MetaFunction = () => [
 
 export default function App() {
   const data = useLoaderData<typeof loader>();
+  const [isLockDateReached, setIsLockDateReached] = useState(
+    dateObject(new Date().toISOString()) >
+      lockDate(data.ENV.CALCULATED_BIRTHDATE)
+  );
 
-  const date = useMemo(() => dateObject(data.ENV.CALCULATED_BIRTHDATE), [data]);
+  useEffect(() => {
+    const interval = setInterval(
+      () =>
+        setIsLockDateReached(
+          dateObject(new Date().toISOString()) >
+            lockDate(data.ENV.CALCULATED_BIRTHDATE)
+        ),
+      ONE_MINUTE * 10
+    );
+
+    return () => {
+      clearInterval(interval);
+    };
+  }, [data.ENV.CALCULATED_BIRTHDATE]);
+
+  const value = useMemo(
+    () => ({
+      ...(data.ENV.BIRTHDATE ? { birthdate: data.ENV.BIRTHDATE } : {}),
+      calculatedBirthdate: dateObject(data.ENV.CALCULATED_BIRTHDATE),
+      isLockDateReached,
+      lockDate: lockDate(data.ENV.CALCULATED_BIRTHDATE),
+    }),
+    [data, isLockDateReached]
+  );
 
   return (
     <html lang="en">
@@ -91,7 +121,7 @@ export default function App() {
       </head>
       <body>
         <SessionContext.Provider value={data?.session ?? null}>
-          <BirthdateContext.Provider value={date}>
+          <BirthdateContext.Provider value={value}>
             <Outlet />
             <Footer />
           </BirthdateContext.Provider>

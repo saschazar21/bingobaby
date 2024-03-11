@@ -26,11 +26,6 @@
 .button {
   --button-bg-color: var(--color-text-muted);
   --button-color: var(--color-bg-special);
-
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: var(--space-m);
 }
 
 @media screen and (min-width: 640px) {

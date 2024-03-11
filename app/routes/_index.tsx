@@ -25,11 +25,11 @@ const Index: FC = () => {
   const session = useSessionContext();
   const date = useBirthDateContext();
 
-  const birthdate = useMemo(() => date?.format("YYYY-MM-DD"), [date]);
-  const closeDate = useMemo(
-    () => date?.subtract(3, "weeks").format("YYYY-MM-DD"),
+  const birthdate = useMemo(
+    () => date?.calculatedBirthdate.format("YYYY-MM-DD"),
     [date]
   );
+  const closeDate = useMemo(() => date?.lockDate.format("YYYY-MM-DD"), [date]);
 
   const className = classNames("container", styles.container);
   const buttonClassName = classNames("button", styles.button);

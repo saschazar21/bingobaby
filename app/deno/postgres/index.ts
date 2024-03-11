@@ -19,6 +19,7 @@ import {
 import { Guess, Session } from "./types.d.ts";
 import { dateObject, LOCK_DATE } from "./utils.ts";
 import { Browser } from "../../utils/browser.ts";
+import { MAX_GUESSES } from "../../utils/constants.ts";
 import { SERVER_ERROR, ServerError } from "../../utils/error.ts";
 
 export class Database {
@@ -110,7 +111,7 @@ export class Database {
         [data.name],
       );
 
-      if (guesses.length >= 3) {
+      if (guesses.length >= MAX_GUESSES) {
         await transaction.rollback();
 
         throw new ServerError(

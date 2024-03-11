@@ -1,0 +1,21 @@
+.icon {
+  justify-self: center;
+  font-size: var(--fs-xl);
+}
+
+.button {
+  grid-column: 1 / -1;
+}
+
+.disabled.disabled.disabled {
+  --color-bg: var(--color-bg-muted);
+  --color-text: var(--color-text-muted);
+
+  text-decoration: line-through;
+}
+
+@media screen and (min-width: 860px) {
+  .button {
+    grid-column: unset;
+  }
+}

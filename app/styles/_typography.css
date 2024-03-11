@@ -103,6 +103,9 @@ h6 {
 :disabled {
   --color-bg: var(--color-bg-muted);
   --color-text: var(--color-text-muted);
+  --button-bg-color: var(--color-bg);
+  --button-color: var(--color-text);
+  --border-color: var(--color-text);
 }
 
 :focus {
@@ -157,6 +160,13 @@ a.button {
 
 button,
 a.button {
+  --gap: var(--space-s);
+
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: var(--gap);
   background-color: var(--button-bg-color, var(--color-bg-special));
   color: var(--button-color, var(--color-text));
   text-transform: uppercase;

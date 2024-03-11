@@ -15,6 +15,11 @@
   --color-text: var(--eerie-black);
   --color-text-muted: var(--jet);
 
+  --color-female-bg: hsla(323, 90%, 96%, 1);
+  --color-female-text: hsla(324, 88%, 42%, 1);
+  --color-male-bg: hsla(190, 100%, 92%, 1);
+  --color-male-text: hsla(190, 100%, 24%, 1);
+
   --space-xs: 0.25rem;
   --space-s: 0.5rem;
   --space-m: 1rem;

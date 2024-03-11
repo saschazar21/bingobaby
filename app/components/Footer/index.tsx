@@ -8,16 +8,18 @@ import {
 import { FC, useEffect, useMemo, useState } from "react";
 
 export const Footer: FC = () => {
-  const date = useBirthDateContext();
+  const value = useBirthDateContext();
   const [relativeTime, setRelativeTime] = useState<string>();
+
+  const { calculatedBirthdate } = value ?? {};
 
   useEffect(() => {
     let interval: NodeJS.Timeout;
 
-    if (date) {
-      setRelativeTime(relativeTimeTo(date));
+    if (calculatedBirthdate) {
+      setRelativeTime(relativeTimeTo(calculatedBirthdate));
       interval = setInterval(
-        () => setRelativeTime(relativeTimeTo(date)),
+        () => setRelativeTime(relativeTimeTo(calculatedBirthdate)),
         ONE_HOUR
       );
     }
@@ -25,16 +27,20 @@ export const Footer: FC = () => {
     return () => {
       clearInterval(interval);
     };
-  }, [date]);
+  }, [calculatedBirthdate]);
 
   const [isBirthdateInTheFuture, isoString, semanticBirthdate] = useMemo(() => {
-    if (!date) {
+    if (!calculatedBirthdate) {
       return [null, null, null];
     }
-    return [isAfterToday(date), date.format("YYYY-MM-DD"), semanticDate(date)];
-  }, [date]);
+    return [
+      isAfterToday(calculatedBirthdate),
+      calculatedBirthdate.format("YYYY-MM-DD"),
+      semanticDate(calculatedBirthdate),
+    ];
+  }, [calculatedBirthdate]);
 
-  if (!date) {
+  if (!calculatedBirthdate) {
     return null;
   }
 

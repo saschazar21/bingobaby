@@ -1,0 +1,49 @@
+.table,
+.row {
+  display: grid;
+  grid-template-rows: 1fr;
+  gap: var(--gap);
+  align-items: center;
+}
+
+.table {
+  grid-template-columns: 1fr;
+  margin-bottom: var(--space-l);
+}
+
+.row {
+  --padding: var(--space-m);
+  --gap: var(--space-m);
+  --button-bg-color: var(--color-text);
+  --button-color: var(--color-bg);
+  --border-color: var(--color-text);
+
+  grid-template-columns: minmax(75px, 25%) minmax(150px, 50%) minmax(75px, 25%);
+  padding: var(--padding);
+  margin: 0 calc(var(--padding) * -1);
+  background-color: var(--color-bg);
+  color: var(--color-text);
+}
+
+.row[data-sex="female"] {
+  --color-bg: var(--color-female-bg);
+  --color-text: var(--color-female-text);
+}
+
+.row[data-sex="male"] {
+  --color-bg: var(--color-male-bg);
+  --color-text: var(--color-male-text);
+}
+
+.row [role="columnheader"] {
+  font-weight: var(--font-weight-bold);
+}
+
+@media screen and (min-width: 860px) {
+  .row {
+    grid-template-columns: minmax(75px, 0.5fr) minmax(150px, 1fr) repeat(
+        2,
+        minmax(75px, 0.75fr)
+      );
+  }
+}

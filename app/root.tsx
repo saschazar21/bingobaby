@@ -124,6 +124,7 @@ export default function App() {
           <BirthdateContext.Provider value={value}>
             <Outlet />
             <Footer />
+            <div id="modal" />
           </BirthdateContext.Provider>
         </SessionContext.Provider>
         <ScrollRestoration />

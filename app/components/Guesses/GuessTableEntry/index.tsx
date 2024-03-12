@@ -48,7 +48,11 @@ export const GuessTableEntry: FC<GuessTableEntryProps> = ({
 
   const icon = useMemo(
     () =>
-      guess.sex === "male" ? <PiGenderMaleBold /> : <PiGenderFemaleBold />,
+      guess.sex === "male" ? (
+        <PiGenderMaleBold title="ein Bub" />
+      ) : (
+        <PiGenderFemaleBold title="ein Mädchen" />
+      ),
     [guess.sex]
   );
 
@@ -87,7 +91,7 @@ export const GuessTableEntry: FC<GuessTableEntryProps> = ({
       <div className={styles.button} role="cell">
         <button disabled={isDisabled} type="button" onClick={handleBeginEdit}>
           <span>Bearbeiten</span>
-          <PiPenBold />
+          <PiPenBold role="presentation" />
         </button>
       </div>
     </div>

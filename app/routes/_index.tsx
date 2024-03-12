@@ -41,7 +41,7 @@ const Index: FC = () => {
           <>
             <Link className={buttonClassName} to="/mitspielen">
               <span>Jetzt mitspielen</span>
-              <PiArrowRightBold />
+              <PiArrowRightBold role="presentation" />
             </Link>
             <UserInfo />
           </>
@@ -59,15 +59,15 @@ const Index: FC = () => {
         </p>
         <div className={styles.icons}>
           <CircleIcon>
-            <PiGenderIntersex />
+            <PiGenderIntersex role="presentation" />
           </CircleIcon>
-          <PiPlusBold />
+          <PiPlusBold role="presentation" />
           <CircleIcon>
-            <PiCalendar />
+            <PiCalendar role="presentation" />
           </CircleIcon>
-          <PiEqualsBold />
+          <PiEqualsBold role="presentation" />
           <CircleIcon>
-            <PiTrophy />
+            <PiTrophy role="presentation" />
           </CircleIcon>
         </div>
         <p>

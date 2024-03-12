@@ -1,13 +1,17 @@
+import { Modal } from "@/components/Modal";
 import { useGuessContext } from "@/contexts/GuessContext";
-import { FC, useMemo } from "react";
+import { FC, useEffect, useMemo, useState } from "react";
+import { PiPlusCircleBold } from "react-icons/pi";
 import { GuessTableEntry } from "../GuessTableEntry";
 
 import styles from "./GuessTableEntry.module.css";
-import { PiPlusCircleBold } from "react-icons/pi";
+import { GuessForm } from "@/components/GuessForm";
 
 export interface GuessTableProps {}
 
 export const GuessTable: FC<GuessTableProps> = () => {
+  const [isOpen, setIsOpen] = useState(false);
+
   const data = useGuessContext();
 
   const guesses = useMemo(() => {
@@ -34,9 +38,14 @@ export const GuessTable: FC<GuessTableProps> = () => {
         </div>
       ) : null}
       {(data?.maxGuesses ?? 0) > (data?.state.guesses.length ?? 0) ? (
-        <button type="button">
-          <span>Neue Schätzung</span> <PiPlusCircleBold />
+        <button onClick={() => setIsOpen(true)} type="button">
+          <span>Neue Schätzung</span> <PiPlusCircleBold role="presentation" />
         </button>
+      ) : null}
+      {isOpen ? (
+        <Modal heading="Neue Schätzung" onClose={() => setIsOpen(false)}>
+          <GuessForm />
+        </Modal>
       ) : null}
     </>
   );

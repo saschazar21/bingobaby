@@ -1,0 +1,68 @@
+.backdrop {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  background-color: hsla(60, 1%, 14%, 85%);
+}
+
+:where(.wrapper, .header, .body) {
+  display: flex;
+  flex-direction: column;
+}
+
+.wrapper {
+  position: fixed;
+  border-top-right-radius: var(--border-radius);
+  border-top-left-radius: var(--border-radius);
+  left: 0;
+  bottom: 0;
+  max-height: 75vh;
+  min-height: 61.8vh;
+  width: 100vw;
+  background-color: var(--color-bg);
+  overflow: hidden;
+  z-index: 9999;
+}
+
+.header,
+.body {
+  --padding: var(--space-s);
+
+  padding: var(--padding);
+}
+
+.header {
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  background-color: var(--color-bg-special);
+}
+
+.body {
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+
+.heading {
+  font-size: var(--fs-lg);
+}
+
+.close {
+  --button-bg-color: var(--color-text-muted);
+  --button-color: var(--color-bg-muted);
+  --border-color: var(--button-bg-color);
+
+  border-radius: 9999px;
+  margin-left: auto;
+  padding: var(--space-s);
+  height: 44px;
+  width: 44px;
+  aspect-ratio: 1;
+}
+
+.close svg {
+  height: 100%;
+  width: 100%;
+}

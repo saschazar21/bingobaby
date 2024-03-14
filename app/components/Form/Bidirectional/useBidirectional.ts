@@ -22,10 +22,28 @@ export const useBidirectional = (props: FieldProps<UserProps>) => {
     ...props,
   };
 
-  const { fieldApi, fieldState, render } = useField<UserProps, number>(config);
+  const { fieldApi, fieldState, render, userProps } = useField<
+    UserProps,
+    number
+  >(config);
 
-  const { value } = fieldState;
+  const { pristine: isPristine, value } = fieldState;
   const { setValue } = fieldApi;
+
+  const parsedValue = useMemo(() => {
+    if (isPristine) {
+      return value;
+    }
+    return value === props.min.value ? "1" : "3";
+  }, [
+    value,
+  ]);
+
+  const validator = useCallback((value: string) => {
+    if (config.required && value === "2") {
+      return "Dieses Feld muss ausgefüllt werden.";
+    }
+  }, [config.required]);
 
   const handleChange: ChangeEventHandler<HTMLInputElement> = useCallback(
     (e) => {
@@ -44,9 +62,10 @@ export const useBidirectional = (props: FieldProps<UserProps>) => {
     [value, setValue],
   );
 
-  const parsedValue = useMemo(() => value === props.min.value ? "1" : "3", [
-    value,
-  ]);
-
-  return { handleChange, render, type: config.type, value: parsedValue };
+  return {
+    handleChange,
+    render,
+    userProps,
+    value: parsedValue,
+  };
 };

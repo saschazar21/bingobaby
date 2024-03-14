@@ -7,7 +7,7 @@ import styles from "./Bidirectional.module.css";
 export interface BidirectionalProps extends FieldProps<UserProps> {}
 
 export const Bidirectional: FC<BidirectionalProps> = (props) => {
-  const { handleChange, render, type, value } = useBidirectional(props);
+  const { handleChange, render, userProps, value } = useBidirectional(props);
 
   return render(
     <div className={styles.wrapper}>
@@ -17,10 +17,8 @@ export const Bidirectional: FC<BidirectionalProps> = (props) => {
           {props.label}
         </label>
         <input
+          {...userProps}
           className={styles.input}
-          type={type}
-          name={props.name}
-          id={props.id}
           min="1"
           max="3"
           step="1"

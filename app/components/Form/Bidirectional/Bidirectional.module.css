@@ -10,6 +10,8 @@
 
 .container {
   flex: 1 0 auto;
+  align-self: center;
+  line-height: 1;
 }
 
 .input {

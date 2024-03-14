@@ -1,0 +1,59 @@
+.wrapper {
+  --gap: var(--space-l);
+
+  flex: 1 0 auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: var(--gap);
+}
+
+.inputs {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap);
+}
+
+.gender {
+  --gap: var(--space-m);
+
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: var(--gap);
+}
+
+.gender > span {
+  flex: 1 0 100%;
+}
+
+.radio {
+  flex: 1 0 calc(50% - var(--gap));
+  align-self: stretch;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-s);
+  min-height: 44px;
+  background-color: var(--color-bg);
+  color: var(--color-text);
+  font-weight: var(--font-weight-bold);
+  transition: background-color var(--duration) ease-in,
+    color var(--duration) ease-in, border-color var(--duration) ease-in;
+}
+
+.radio[data-value="female"][data-checked="true"] {
+  --color-bg: var(--color-female-bg);
+  --color-text: var(--color-female-text);
+  --color-border: var(--color-text);
+}
+
+.radio[data-value="male"][data-checked="true"] {
+  --color-bg: var(--color-male-bg);
+  --color-text: var(--color-male-text);
+  --color-border: var(--color-text);
+}
+
+.radio > svg {
+  font-size: var(--fs-lg);
+}

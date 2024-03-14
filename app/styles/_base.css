@@ -14,6 +14,7 @@
   --color-alert: var(--engineering-orange);
   --color-text: var(--eerie-black);
   --color-text-muted: var(--jet);
+  --color-border: var(--color-text-muted);
 
   --color-female-bg: hsla(323, 90%, 96%, 1);
   --color-female-text: hsla(324, 88%, 42%, 1);

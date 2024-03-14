@@ -8,6 +8,7 @@
   "scripts": {
     "build": "remix build",
     "dev": "remix dev --manual -c \"ntl dev\"",
+    "docker": "docker run --rm --name postgres -p 5432:5432 -v $(pwd):/docker-entrypoint-initdb.d -e POSTGRES_PASSWORD=test postgres:alpine",
     "lint": "eslint --ignore-path .gitignore --cache --cache-location ./node_modules/.cache/eslint .",
     "start": "netlify serve",
     "typecheck": "tsc"

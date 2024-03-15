@@ -5,3 +5,19 @@
   flex-direction: column;
   gap: var(--gap);
 }
+
+.input {
+  -webkit-appearance: none;
+  appearance: none;
+  min-height: 44px;
+}
+
+.info {
+  display: none;
+}
+
+@media screen and (min-width: 640px) {
+  .info {
+    display: initial;
+  }
+}

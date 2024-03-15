@@ -10,35 +10,36 @@
   }
 }
 
-.backdrop {
-  animation: appear var(--animation-duration) ease;
-  position: fixed;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  left: 0;
-  opacity: 1;
-  background-color: hsla(60, 1%, 14%, 85%);
-}
-
-:where(.wrapper, .header, .body) {
+:where(.dialog, .header, .body) {
   display: flex;
   flex-direction: column;
 }
 
-.wrapper {
+.dialog {
   animation: slidein var(--animation-duration) ease;
   position: fixed;
+  border: none;
   border-top-right-radius: var(--border-radius);
   border-top-left-radius: var(--border-radius);
+  box-shadow: 0 15px 35px -1px var(--color-text);
+  margin: 0;
+  margin-top: auto;
+  padding: 0;
   left: 0;
   bottom: 0;
   max-height: 75vh;
   min-height: 61.8vh;
   width: 100vw;
-  background-color: var(--color-bg);
+  min-width: 100vw;
+  background-color: var(--color-bg-special);
   overflow: hidden;
   z-index: 9999;
+}
+
+.dialog::backdrop {
+  animation: appear var(--animation-duration) ease;
+  opacity: 1;
+  background-color: hsla(60, 1%, 14%, 85%);
 }
 
 .header,
@@ -52,11 +53,12 @@
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
-  background-color: var(--color-bg-special);
 }
 
 .body {
   flex: 1 0 auto;
+  border-radius: inherit;
+  background-color: var(--color-bg);
   overflow-x: hidden;
   overflow-y: auto;
 }
@@ -84,11 +86,13 @@
 }
 
 @media screen and (min-width: 640px) {
-  .wrapper {
+  .dialog {
+    border: var(--border-width) solid var(--color-border);
     border-radius: var(--border-radius);
     bottom: 50%;
     left: 50%;
     min-height: 50vh;
+    min-width: unset;
     max-width: 640px;
     transform: translateX(-50%) translateY(50%);
   }

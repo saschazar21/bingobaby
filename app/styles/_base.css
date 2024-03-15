@@ -71,6 +71,10 @@ body,
   max-width: var(--container-width);
 }
 
+body:has(dialog[open]) {
+  overflow: hidden;
+}
+
 main {
   flex: 1 0 auto;
 }

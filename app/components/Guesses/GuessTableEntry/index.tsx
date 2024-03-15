@@ -29,7 +29,7 @@ export const GuessTableEntry: FC<GuessTableEntryProps> = ({
   guess,
 }) => {
   const birthdateContext = useContext(BirthdateContext);
-  const guessEdit = useGuessEditContext();
+  const [, setGuess] = useGuessEditContext() ?? [];
   const [lastUpdatedAt, setLastUpdatedAt] = useState(
     relativeTimeTo(dateObject(guess.updated_at), false)
   );
@@ -65,9 +65,9 @@ export const GuessTableEntry: FC<GuessTableEntryProps> = ({
     [guess.date]
   );
 
-  const handleBeginEdit = useCallback(
-    () => guessEdit?.handleBeginEdit(guess) ?? null,
-    [guessEdit?.handleBeginEdit, guess]
+  const handleSetGuess = useCallback(
+    () => (typeof setGuess === "function" ? setGuess(guess) : null),
+    [setGuess, guess]
   );
 
   const isDisabled = useMemo(
@@ -89,7 +89,7 @@ export const GuessTableEntry: FC<GuessTableEntryProps> = ({
       <div role="cell">{formattedDate}</div>
       <div role="cell">{lastUpdatedAt}</div>
       <div className={styles.button} role="cell">
-        <button disabled={isDisabled} type="button" onClick={handleBeginEdit}>
+        <button disabled={isDisabled} type="button" onClick={handleSetGuess}>
           <span>Bearbeiten</span>
           <PiPenBold role="presentation" />
         </button>

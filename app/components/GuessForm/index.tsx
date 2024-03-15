@@ -1,5 +1,5 @@
-import { Form } from "informed";
-import { FC, useMemo } from "react";
+import { Form, Input } from "informed";
+import { FC } from "react";
 import {
   PiCheckBold,
   PiGenderFemaleBold,
@@ -12,36 +12,21 @@ import { GuessFormProps, useGuessForm } from "./useGuessForm";
 import styles from "./GuessForm.module.css";
 
 export const GuessForm: FC<GuessFormProps> = (props) => {
-  const { action, handleSubmit, handleSubmitFailure, method } =
+  const { action, guess, handleSubmit, handleSubmitFailure, method, ref } =
     useGuessForm(props);
-
-  const min = useMemo(
-    () => ({
-      el: <PiGenderMaleBold />,
-      value: "male",
-    }),
-    []
-  );
-
-  const max = useMemo(
-    () => ({
-      el: <PiGenderFemaleBold />,
-      value: "female",
-    }),
-    []
-  );
 
   return (
     <Form
       className={styles.wrapper}
+      formApiRef={ref}
       onSubmit={handleSubmit}
       onSubmitFailure={handleSubmitFailure}
       method={method}
       action={action}
     >
       <div className={styles.inputs}>
-        <div className={styles.gender}>
-          <span>Was wird es?</span>
+        <fieldset className={styles.gender}>
+          <legend>Was wird es?</legend>
           <Radio
             className={styles.radio}
             id="female-radio"
@@ -62,11 +47,12 @@ export const GuessForm: FC<GuessFormProps> = (props) => {
             <span>ein Bub</span>
             <PiGenderMaleBold />
           </Radio>
-        </div>
+        </fieldset>
         <DateTime
           label="Wann kommt es auf die Welt?"
           id="date-input"
           name="date"
+          placeholder="Geburtszeitpunkt eingeben"
           required
         />
       </div>

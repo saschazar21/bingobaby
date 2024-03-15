@@ -1,18 +1,20 @@
+import { GuessForm } from "@/components/GuessForm";
 import { Modal } from "@/components/Modal";
 import { useGuessContext } from "@/contexts/GuessContext";
-import { FC, useEffect, useMemo, useState } from "react";
+import { useGuessEditContext } from "@/contexts/GuessEditContext";
+import { PubSubContextProvider } from "@/contexts/PubSubContext";
+import { FC, MouseEventHandler, useCallback, useMemo, useRef } from "react";
 import { PiPlusCircleBold } from "react-icons/pi";
 import { GuessTableEntry } from "../GuessTableEntry";
 
 import styles from "./GuessTableEntry.module.css";
-import { GuessForm } from "@/components/GuessForm";
 
 export interface GuessTableProps {}
 
 export const GuessTable: FC<GuessTableProps> = () => {
-  const [isOpen, setIsOpen] = useState(false);
-
+  const ref = useRef<HTMLDialogElement>(null);
   const data = useGuessContext();
+  const [guess] = useGuessEditContext() ?? [];
 
   const guesses = useMemo(() => {
     if (data?.state.guesses) {
@@ -22,6 +24,10 @@ export const GuessTable: FC<GuessTableProps> = () => {
     }
     return null;
   }, [data?.state.guesses]);
+
+  const handleOpenDialog: MouseEventHandler = useCallback((_e) => {
+    ref.current?.showModal();
+  }, []);
 
   return (
     <>
@@ -38,15 +44,18 @@ export const GuessTable: FC<GuessTableProps> = () => {
         </div>
       ) : null}
       {(data?.maxGuesses ?? 0) > (data?.state.guesses.length ?? 0) ? (
-        <button onClick={() => setIsOpen(true)} type="button">
+        <button onClick={handleOpenDialog} type="button">
           <span>Neue Schätzung</span> <PiPlusCircleBold role="presentation" />
         </button>
       ) : null}
-      {isOpen ? (
-        <Modal heading="Neue Schätzung" onClose={() => setIsOpen(false)}>
+      <PubSubContextProvider>
+        <Modal
+          ref={ref}
+          heading={guess?.id ? "Schätzung bearbeiten" : "Neue Schätzung"}
+        >
           <GuessForm />
         </Modal>
-      ) : null}
+      </PubSubContextProvider>
     </>
   );
 };

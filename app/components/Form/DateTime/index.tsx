@@ -14,8 +14,13 @@ export const DateTime: FC<DateTimeProps> = (props) => {
   return render(
     <label className={styles.wrapper} htmlFor={props.id}>
       <span>{label}</span>
-      <input {...rest} value={value as string} onChange={handleChange} />
-      <small>
+      <input
+        className={styles.input}
+        {...rest}
+        value={value as string}
+        onChange={handleChange}
+      />
+      <small className={styles.info}>
         Hinweis: ein Klick auf das Kalendersymbol öffnet die Kalendervorschau.
       </small>
     </label>

@@ -32,7 +32,7 @@
 }
 
 .radio {
-  flex: 1 0 calc(50% - var(--gap));
+  flex: 1 0 calc(50% - var(--gap) * 0.5);
   align-self: stretch;
   display: flex;
   flex-direction: column;

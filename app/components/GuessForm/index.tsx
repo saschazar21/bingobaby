@@ -6,6 +6,7 @@ import {
   PiGenderMaleBold,
 } from "react-icons/pi";
 import { DateTime } from "@/components/Form/DateTime";
+import { Hidden } from "@/components/Form/Hidden";
 import { Radio } from "@/components/Form/Radio";
 import { GuessFormProps, useGuessForm } from "./useGuessForm";
 
@@ -56,6 +57,7 @@ export const GuessForm: FC<GuessFormProps> = (props) => {
           required
         />
       </div>
+      {guess?.id ? <Hidden id="guess-id" name="id" value={guess.id} /> : null}
       <button className={styles.submit} type="submit">
         <span>Abschicken</span> <PiCheckBold role="presentation" />
       </button>

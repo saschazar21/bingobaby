@@ -49,7 +49,6 @@ export const usePubSub = (): PubSub => {
   );
 
   const publish = useCallback((value?: string) => {
-    console.log(value);
     for (const fn of subscribers.values()) {
       fn(value);
     }

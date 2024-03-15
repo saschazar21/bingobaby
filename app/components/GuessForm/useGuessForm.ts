@@ -33,8 +33,6 @@ export const useGuessForm = (props: GuessFormProps) => {
   const handleModalClose = useCallback((value?: string) => {
     if (value === DIALOG_ACTIONS.CLOSE) {
       typeof setGuess === "function" && setGuess(null);
-      const state = ref.current?.getFormState();
-      console.log(state);
     }
   }, [setGuess]);
 
@@ -59,7 +57,9 @@ export const useGuessForm = (props: GuessFormProps) => {
     [props.guess],
   );
 
-  const handleSubmit = useCallback((formState: FormState) => {}, []);
+  const handleSubmit = useCallback((formState: FormState) => {
+    console.log(formState);
+  }, []);
 
   const handleSubmitFailure = useCallback((errors: Record<string, unknown>) => {
     console.log(errors);

@@ -1,0 +1,37 @@
+.error {
+  --gap: var(--space-m);
+
+  position: absolute;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--gap);
+  border-radius: var(--border-radius);
+  padding: var(--space-s) var(--space-m);
+  bottom: calc(100% + var(--space-xs));
+  left: 0;
+  width: 100%;
+  background-color: var(--color-alert);
+  color: var(--color-bg-muted);
+  font-weight: var(--font-weight-bold);
+}
+
+.error::before {
+  content: "";
+  position: absolute;
+  border: var(--space-s) solid transparent;
+  border-top-color: var(--color-alert);
+  width: var(--space-m);
+  top: 100%;
+  right: var(--space-m);
+}
+
+.close {
+  --button-bg-color: var(--color-bg-muted);
+  --button-color: var(--color-alert);
+  --border-color: var(--button-color);
+  --size: 32px;
+
+  margin-right: calc(var(--space-s) * -1);
+  padding: var(--space-xs);
+}

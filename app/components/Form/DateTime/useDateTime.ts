@@ -22,7 +22,7 @@ export const useDateTime = (props: FieldProps<UserProps>) => {
   >(config);
 
   const { setValue } = fieldApi;
-  const { value } = fieldState;
+  const { error, showError, value } = fieldState;
 
   const handleChange: ChangeEventHandler<HTMLInputElement> = useCallback(
     (e) => {
@@ -41,7 +41,9 @@ export const useDateTime = (props: FieldProps<UserProps>) => {
   }, [value]);
 
   return {
+    error,
     handleChange,
+    isErrorShown: showError,
     render,
     userProps,
     value: parsedValue,

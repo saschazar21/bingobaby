@@ -22,7 +22,7 @@ CREATE TABLE IF NOT EXISTS browsers (
     version TEXT,
     device TEXT,
     os TEXT,
-    created_at TIMESTAMP DEFAULT now()
+    created_at TIMESTAMP WITHOUT TIME ZONE DEFAULT (now() AT TIME ZONE 'utc')
 );
 
 CREATE TABLE IF NOT EXISTS sessions (
@@ -31,17 +31,17 @@ CREATE TABLE IF NOT EXISTS sessions (
     error TEXT,
     active BOOLEAN DEFAULT true,
     browser TEXT REFERENCES browsers(user_agent) ON DELETE SET NULL,
-    created_at TIMESTAMP DEFAULT now(),
-    updated_at TIMESTAMP
+    created_at TIMESTAMP WITHOUT TIME ZONE DEFAULT (now() AT TIME ZONE 'utc'),
+    updated_at TIMESTAMP WITHOUT TIME ZONE
 );
 
 CREATE TABLE IF NOT EXISTS guesses (
     id TEXT PRIMARY KEY,
     name TEXT REFERENCES users(name) ON DELETE CASCADE NOT NULL,
-    date TIMESTAMP NOT NULL,
+    date TIMESTAMP WITHOUT TIME ZONE NOT NULL,
     sex sex NOT NULL,
-    created_at TIMESTAMP DEFAULT now(),
-    updated_at TIMESTAMP
+    created_at TIMESTAMP WITHOUT TIME ZONE DEFAULT (now() AT TIME ZONE 'utc'),
+    updated_at TIMESTAMP WITHOUT TIME ZONE
 );
 
 

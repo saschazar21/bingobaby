@@ -1,4 +1,5 @@
 import { FC, useCallback } from "react";
+import { Error } from "@/components/Error";
 import { useLoginContext } from "@/contexts/LoginContext";
 import { LoginFormHook } from "@/contexts/LoginContext/useLoginForm";
 
@@ -37,9 +38,7 @@ export const LoginForm: FC<LoginFormProps> = (props) => {
           onChange={handleChange}
         />
         {state.error && state.isErrorShown ? (
-          <small className={styles.error} role="alert">
-            {state.error}
-          </small>
+          <Error>{state.error}</Error>
         ) : null}
       </div>
       <button

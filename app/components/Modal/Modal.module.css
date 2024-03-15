@@ -67,24 +67,6 @@
   font-size: var(--fs-lg);
 }
 
-.close {
-  --button-bg-color: var(--color-text-muted);
-  --button-color: var(--color-bg-muted);
-  --border-color: var(--button-bg-color);
-
-  border-radius: 9999px;
-  margin-left: auto;
-  padding: var(--space-s);
-  height: 44px;
-  width: 44px;
-  aspect-ratio: 1;
-}
-
-.close svg {
-  height: 100%;
-  width: 100%;
-}
-
 @media screen and (min-width: 640px) {
   .dialog {
     border: var(--border-width) solid var(--color-border);

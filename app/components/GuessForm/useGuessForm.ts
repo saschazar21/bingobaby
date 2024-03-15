@@ -3,8 +3,9 @@ import { useGuessEditContext } from "@/contexts/GuessEditContext";
 import { usePubSubContext } from "@/contexts/PubSubContext";
 import { Guess } from "@/deno/postgres/types";
 import { DIALOG_ACTIONS } from "@/utils/pubsub";
+import { validateAgainstPastDate, validateLength } from "@/utils/validators";
 import { FormApi, FormState } from "informed";
-import { useCallback, useEffect, useMemo, useRef } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 
 export interface GuessFormProps {
   guess?: Guess;
@@ -58,12 +59,35 @@ export const useGuessForm = (props: GuessFormProps) => {
   );
 
   const handleSubmit = useCallback((formState: FormState) => {
-    console.log(formState);
-  }, []);
-
-  const handleSubmitFailure = useCallback((errors: Record<string, unknown>) => {
+    const { errors, maskedValues, valid: isValid } = formState;
     console.log(errors);
+    if (isValid) {
+      // TODO: add form submission;
+    }
   }, []);
 
-  return { action, guess, handleSubmit, handleSubmitFailure, method, ref };
+  const handleSubmitFailure = useCallback((formState: FormState) => {
+    // TODO: add error handling;
+  }, []);
+
+  const validateDate = useCallback(
+    (value: unknown) => {
+      try {
+        validateAgainstPastDate(value as string);
+      } catch (e) {
+        return (e as Error).message;
+      }
+    },
+    [],
+  );
+
+  return {
+    action,
+    guess,
+    handleSubmit,
+    handleSubmitFailure,
+    method,
+    ref,
+    validateDate,
+  };
 };

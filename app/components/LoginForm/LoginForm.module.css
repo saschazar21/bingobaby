@@ -21,29 +21,6 @@
   position: relative;
 }
 
-.error {
-  position: absolute;
-  display: block;
-  border-radius: var(--border-radius);
-  padding: var(--space-s) var(--space-m);
-  bottom: calc(100% + var(--space-xs));
-  left: 0;
-  width: 100%;
-  background-color: var(--color-alert);
-  color: var(--color-bg-muted);
-  font-weight: var(--font-weight-bold);
-}
-
-.error::before {
-  content: "";
-  position: absolute;
-  border: var(--space-s) solid transparent;
-  border-top-color: var(--color-alert);
-  width: var(--space-m);
-  top: 100%;
-  right: var(--space-m);
-}
-
 .submit {
   --button-bg-color: var(--color-text-muted);
   --button-color: var(--color-bg-special);

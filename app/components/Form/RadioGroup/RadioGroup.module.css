@@ -1,0 +1,21 @@
+.wrapper {
+  --gap: var(--space-m);
+
+  position: relative;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: var(--gap);
+  border: none;
+  padding-bottom: var(--space-l);
+}
+
+.label {
+  flex: 1 0 100%;
+  display: block;
+  margin-bottom: var(--gap);
+}
+
+.wrapper:has([data-checked="true"]) [data-checked="false"] {
+  opacity: 0.5;
+}

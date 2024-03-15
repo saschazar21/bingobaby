@@ -1,3 +1,21 @@
+@keyframes wiggle {
+  0% {
+    transform: translateX(15%);
+  }
+  25% {
+    transform: translateX(-9%);
+  }
+  50% {
+    transform: translateX(5%);
+  }
+  75% {
+    transform: translateX(-2%);
+  }
+  100% {
+    transform: translateX(0%);
+  }
+}
+
 @font-face {
   font-family: "Inter";
   font-weight: 300;
@@ -111,6 +129,21 @@ h6 {
   outline-offset: var(--border-width);
 }
 
+[role="alert"] {
+  color: var(--color-alert);
+}
+
+small[role="alert"] {
+  animation: wiggle var(--animation-duration) ease;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  max-width: 100%;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
 :is(a, a:hover, a:focus, a:visited) {
   --color: var(--link-color, var(--color-text));
 
@@ -175,4 +208,22 @@ a.button {
 a.button::before,
 a.button::after {
   display: none;
+}
+
+.icon-button {
+  --button-bg-color: var(--color-text-muted);
+  --button-color: var(--color-bg-muted);
+  --border-color: var(--button-bg-color);
+
+  border-radius: 9999px;
+  margin-left: auto;
+  padding: var(--space-s);
+  height: var(--size, 44px);
+  width: var(--size, 44px);
+  aspect-ratio: 1;
+}
+
+.icon-button svg {
+  height: 100%;
+  width: 100%;
 }

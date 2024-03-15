@@ -99,6 +99,15 @@ export class Database {
       );
     }
 
+    if (
+      data.date && dateObject(data.date) < dateObject(new Date().toISOString())
+    ) {
+      throw new ServerError(
+        "Das Datum der Schätzung kann nicht in der Vergangenheit liegen.",
+        400,
+      );
+    }
+
     try {
       await this.client.connect();
 

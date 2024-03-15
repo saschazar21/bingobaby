@@ -15,22 +15,6 @@
   gap: var(--gap);
 }
 
-.gender {
-  --gap: var(--space-m);
-
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-between;
-  gap: var(--gap);
-  border: none;
-}
-
-.gender > legend {
-  flex: 1 0 100%;
-  display: block;
-  margin-bottom: var(--gap);
-}
-
 .radio {
   flex: 1 0 calc(50% - var(--gap) * 0.5);
   align-self: stretch;
@@ -43,7 +27,8 @@
   color: var(--color-text);
   font-weight: var(--font-weight-bold);
   transition: background-color var(--duration) ease-in,
-    color var(--duration) ease-in, border-color var(--duration) ease-in;
+    color var(--duration) ease-in, border-color var(--duration) ease-in,
+    opacity var(--duration) ease-in;
 }
 
 .radio[data-value="female"][data-checked="true"] {

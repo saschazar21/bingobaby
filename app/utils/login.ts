@@ -6,18 +6,7 @@ import {
   redirectCookie,
   SESSION_COOKIE_EXPIRE_DURATION,
 } from "./cookie";
-
-const validateLength = (name: string) => {
-  if (!name?.length) {
-    throw new Error("Feld darf nicht leer sein.");
-  }
-};
-
-const validateSegments = (name: string) => {
-  if (name.split(" ").filter((segment) => segment.length > 0).length !== 2) {
-    throw new Error("Name muss aus Vor- und Nachname bestehen!");
-  }
-};
+import { validateLength, validateSegments } from "./validators";
 
 const activeValidators = [validateLength, validateSegments];
 

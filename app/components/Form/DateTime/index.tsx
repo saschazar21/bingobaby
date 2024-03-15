@@ -9,10 +9,15 @@ export interface DateTimeProps extends FieldProps<UserProps> {}
 export const DateTime: FC<DateTimeProps> = (props) => {
   const { render, handleChange, userProps, value } = useDateTime(props);
 
+  const { label, ...rest } = userProps;
+
   return render(
-    <div className={styles.wrapper}>
-      <label htmlFor={props.id}>{props.label}</label>
-      <input {...userProps} value={value as string} onChange={handleChange} />
-    </div>
+    <label className={styles.wrapper} htmlFor={props.id}>
+      <span>{label}</span>
+      <input {...rest} value={value as string} onChange={handleChange} />
+      <small>
+        Hinweis: ein Klick auf das Kalendersymbol öffnet die Kalendervorschau.
+      </small>
+    </label>
   );
 };

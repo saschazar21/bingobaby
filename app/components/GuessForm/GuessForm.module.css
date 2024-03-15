@@ -1,11 +1,12 @@
 .wrapper {
-  --gap: var(--space-l);
+  --gap: var(--space-xl);
 
   flex: 1 0 auto;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   gap: var(--gap);
+  margin-top: var(--space-m);
 }
 
 .inputs {

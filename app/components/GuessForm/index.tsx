@@ -47,6 +47,7 @@ export const GuessForm: FC<GuessFormProps> = (props) => {
             id="female-radio"
             name="sex"
             value="female"
+            required
           >
             <span>ein Mädchen</span>
             <PiGenderFemaleBold />
@@ -56,6 +57,7 @@ export const GuessForm: FC<GuessFormProps> = (props) => {
             id="male-radio"
             name="sex"
             value="male"
+            required
           >
             <span>ein Bub</span>
             <PiGenderMaleBold />

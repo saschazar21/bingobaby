@@ -1,9 +1,23 @@
+@keyframes appear {
+  from {
+    opacity: 0;
+  }
+}
+
+@keyframes slidein {
+  from {
+    bottom: -100%;
+  }
+}
+
 .backdrop {
+  animation: appear var(--animation-duration) ease;
   position: fixed;
   top: 0;
   right: 0;
   bottom: 0;
   left: 0;
+  opacity: 1;
   background-color: hsla(60, 1%, 14%, 85%);
 }
 
@@ -13,6 +27,7 @@
 }
 
 .wrapper {
+  animation: slidein var(--animation-duration) ease;
   position: fixed;
   border-top-right-radius: var(--border-radius);
   border-top-left-radius: var(--border-radius);
@@ -66,4 +81,20 @@
 .close svg {
   height: 100%;
   width: 100%;
+}
+
+@media screen and (min-width: 640px) {
+  .wrapper {
+    border-radius: var(--border-radius);
+    bottom: 50%;
+    left: 50%;
+    min-height: 50vh;
+    max-width: 640px;
+    transform: translateX(-50%) translateY(50%);
+  }
+
+  .header,
+  .body {
+    --padding: var(--space-l);
+  }
 }

@@ -89,7 +89,7 @@ export class Database {
     }
   }
 
-  async createGuess(data: Omit<Guess, "id">) {
+  async createGuess(data: Omit<Guess, "id" | "created_at" | "updated_at">) {
     if (dateObject(new Date().toISOString()) > LOCK_DATE) {
       throw new ServerError(
         `Seit ${

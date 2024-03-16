@@ -13,7 +13,7 @@ import { GuessFormProps, useGuessForm } from "./useGuessForm";
 
 import styles from "./GuessForm.module.css";
 
-export const GuessForm: FC<GuessFormProps> = (props) => {
+export const GuessForm: FC<GuessFormProps> = () => {
   const {
     action,
     guess,
@@ -22,7 +22,7 @@ export const GuessForm: FC<GuessFormProps> = (props) => {
     method,
     ref,
     validateDate,
-  } = useGuessForm(props);
+  } = useGuessForm();
 
   return (
     <Form
@@ -30,7 +30,7 @@ export const GuessForm: FC<GuessFormProps> = (props) => {
       formApiRef={ref}
       onSubmit={handleSubmit}
       onSubmitFailure={
-        handleSubmitFailure as (formState: Record<string, any>) => void
+        handleSubmitFailure as (formState: Record<string, unknown>) => void
       }
       method={method}
       action={action}

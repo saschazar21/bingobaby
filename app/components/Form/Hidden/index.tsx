@@ -16,7 +16,7 @@ export const Hidden: FC<HiddenProps> = ({ value, ...props }) => {
       ...props,
       type: "hidden",
     }),
-    [props]
+    [props, value]
   );
 
   const { render, userProps } = useField<UserProps, string>(config);

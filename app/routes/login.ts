@@ -38,7 +38,7 @@ export const action: ActionFunction = async ({ request }) => {
       browser,
     });
 
-    return redirect(redirectPath ?? "/", {
+    return redirect(redirectPath ?? "/mitspielen", {
       headers: [
         [
           "set-cookie",

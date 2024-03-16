@@ -37,12 +37,7 @@ const ModalContent: ForwardRefRenderFunction<HTMLDialogElement, ModalProps> = (
       >
         <div className={styles.header}>
           <h2 className={styles.heading}>{heading}</h2>
-          <button
-            autoFocus
-            onClick={handleClose}
-            className="icon-button"
-            type="button"
-          >
+          <button onClick={handleClose} className="icon-button" type="button">
             <PiXBold />
           </button>
         </div>

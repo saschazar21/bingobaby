@@ -29,7 +29,6 @@ export const LoginForm: FC<LoginFormProps> = (props) => {
         <input
           id={getPrefixedId("name")}
           name="name"
-          autoFocus={props.autoFocus ? true : undefined}
           required
           placeholder="Vorname Nachname"
           value={state.value}

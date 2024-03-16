@@ -20,7 +20,7 @@ export const useModal = (ref: RefObject<HTMLDialogElement>) => {
         ref.current?.close();
         break;
     }
-  }, []);
+  }, [ref]);
 
   useEffect(() => {
     let unsubscribe: () => void;
@@ -29,17 +29,17 @@ export const useModal = (ref: RefObject<HTMLDialogElement>) => {
     }
 
     return () => {
-      if (typeof unsubscribe !== "undefined") {
+      if (typeof unsubscribe === "function") {
         unsubscribe();
       }
     };
-  }, [pubSub?.subscribe]);
+  }, [handleOpen, pubSub, pubSub?.subscribe]);
 
   const handleClose: MouseEventHandler<HTMLButtonElement> = useCallback(
     (_e) => {
       (ref as RefObject<HTMLDialogElement>).current?.close();
     },
-    [],
+    [ref],
   );
 
   const handleClick: MouseEventHandler<HTMLDialogElement> = useCallback((e) => {
@@ -65,7 +65,7 @@ export const useModal = (ref: RefObject<HTMLDialogElement>) => {
     () => {
       pubSub?.publish(DIALOG_ACTIONS.CLOSE);
     },
-    [pubSub?.publish],
+    [pubSub],
   );
 
   return {

@@ -1,21 +1,33 @@
 import { useDialogContext } from "@/contexts/DialogContext";
 import { useGuessEditContext } from "@/contexts/GuessEditContext";
 import { usePubSubContext } from "@/contexts/PubSubContext";
-import { Guess } from "@/deno/postgres/types";
+import { useLazyApi } from "@/hooks/useApi";
 import { DIALOG_ACTIONS } from "@/utils/pubsub";
-import { validateAgainstPastDate, validateLength } from "@/utils/validators";
+import { validateAgainstPastDate } from "@/utils/validators";
 import { FormApi, FormState } from "informed";
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef } from "react";
 
 export interface GuessFormProps {
-  guess?: Guess;
 }
 
-export const useGuessForm = (props: GuessFormProps) => {
+export const useGuessForm = () => {
   const dialogRef = useDialogContext();
   const ref = useRef<FormApi>(null);
   const pubSub = usePubSubContext();
   const [guess, setGuess] = useGuessEditContext() ?? [];
+
+  const [method, action] = useMemo(
+    () =>
+      guess ? ["PUT", `/api/guesses/${guess.id}`] : ["POST", "/api/guesses"],
+    [guess],
+  );
+
+  console.log(guess, method, action);
+
+  const { error, isLoading, submit } = useLazyApi(
+    action,
+    method as "PUT" | "POST",
+  );
 
   useEffect(() => {
     if (guess) {
@@ -29,11 +41,12 @@ export const useGuessForm = (props: GuessFormProps) => {
     } else {
       ref.current?.reset();
     }
-  }, [guess]);
+  }, [dialogRef, guess]);
 
   const handleModalClose = useCallback((value?: string) => {
     if (value === DIALOG_ACTIONS.CLOSE) {
       typeof setGuess === "function" && setGuess(null);
+      ref.current?.reset();
     }
   }, [setGuess]);
 
@@ -48,23 +61,15 @@ export const useGuessForm = (props: GuessFormProps) => {
         unsubscribe();
       }
     };
-  }, [pubSub?.subscribe]);
+  }, [handleModalClose, pubSub, pubSub?.subscribe]);
 
-  const [method, action] = useMemo(
-    () =>
-      props.guess
-        ? ["PUT", `/api/guesses/${props.guess.id}`]
-        : ["POST", "/api/guesses"],
-    [props.guess],
-  );
-
-  const handleSubmit = useCallback((formState: FormState) => {
+  const handleSubmit = useCallback(async (formState: FormState) => {
     const { errors, maskedValues, valid: isValid } = formState;
-    console.log(errors);
     if (isValid) {
-      // TODO: add form submission;
+      const data = await submit(maskedValues as Record<string, string>);
+      console.log(data);
     }
-  }, []);
+  }, [submit]);
 
   const handleSubmitFailure = useCallback((formState: FormState) => {
     // TODO: add error handling;

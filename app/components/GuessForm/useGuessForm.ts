@@ -23,8 +23,6 @@ export const useGuessForm = () => {
     [guess],
   );
 
-  console.log(guess, method, action);
-
   const { error: _, isLoading: __, submit } = useLazyApi(
     action,
     method as "PUT" | "POST",
@@ -82,7 +80,6 @@ export const useGuessForm = () => {
       if (res.error) {
         setFormError(res.error);
       } else {
-        console.log(res.data);
         setFormError(null);
         setGuess(null);
         resetForm();

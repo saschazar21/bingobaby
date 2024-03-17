@@ -34,6 +34,7 @@ export const Radio: FC<RadioProps> = ({ value, ...props }) => {
         {...rest}
         value={value}
         onChange={handleChange}
+        checked={value === currentValue}
       />
     </label>
   );

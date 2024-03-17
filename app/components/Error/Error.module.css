@@ -1,6 +1,14 @@
-.error {
+@keyframes slideup {
+  from {
+    opacity: 0;
+    transform: translateY(-50%);
+  }
+}
+
+.error.error {
   --gap: var(--space-m);
 
+  animation: slideup var(--animation-duration) ease;
   position: absolute;
   display: flex;
   justify-content: space-between;
@@ -8,12 +16,16 @@
   gap: var(--gap);
   border-radius: var(--border-radius);
   padding: var(--space-s) var(--space-m);
-  bottom: calc(100% + var(--space-xs));
+  bottom: calc(100% + var(--space-s));
   left: 0;
   width: 100%;
   background-color: var(--color-alert);
   color: var(--color-bg-muted);
   font-weight: var(--font-weight-bold);
+  opacity: 1;
+  transform: translateY(0);
+  overflow: unset;
+  white-space: initial;
 }
 
 .error::before {

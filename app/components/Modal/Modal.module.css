@@ -32,7 +32,7 @@
   width: 100vw;
   min-width: 100vw;
   background-color: var(--color-bg-special);
-  overflow: hidden;
+  overflow: visible;
   z-index: 9999;
 }
 
@@ -59,8 +59,6 @@
   flex: 1 0 auto;
   border-radius: inherit;
   background-color: var(--color-bg);
-  overflow-x: hidden;
-  overflow-y: auto;
 }
 
 .heading {

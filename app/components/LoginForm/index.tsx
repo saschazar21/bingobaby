@@ -16,7 +16,7 @@ export const LoginForm: FC<LoginFormProps> = (props) => {
 
   const getPrefixedId = useCallback(
     (id: string) => `${props.prefix}-${id}`,
-    []
+    [props.prefix]
   );
 
   return (

@@ -5,6 +5,7 @@ import {
   PiGenderFemaleBold,
   PiGenderMaleBold,
 } from "react-icons/pi";
+import { Error } from "@/components/Error";
 import { DateTime } from "@/components/Form/DateTime";
 import { Hidden } from "@/components/Form/Hidden";
 import { Radio } from "@/components/Form/Radio";
@@ -16,7 +17,9 @@ import styles from "./GuessForm.module.css";
 export const GuessForm: FC<GuessFormProps> = () => {
   const {
     action,
+    formError,
     guess,
+    handleErrorClose,
     handleSubmit,
     handleSubmitFailure,
     method,
@@ -38,6 +41,7 @@ export const GuessForm: FC<GuessFormProps> = () => {
         required: "Dieses Feld muss ausgefüllt werden.",
       }}
     >
+      {formError ? <Error onClose={handleErrorClose}>{formError}</Error> : null}
       <div className={styles.inputs}>
         <RadioGroup name="sex" label="Was wird es?">
           <Radio

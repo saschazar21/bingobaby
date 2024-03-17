@@ -5,7 +5,7 @@ import { useLazyApi } from "@/hooks/useApi";
 import { DIALOG_ACTIONS } from "@/utils/pubsub";
 import { validateAgainstPastDate } from "@/utils/validators";
 import { FormApi, FormState } from "informed";
-import { useCallback, useEffect, useMemo, useRef } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 
 export interface GuessFormProps {
 }
@@ -15,6 +15,7 @@ export const useGuessForm = () => {
   const ref = useRef<FormApi>(null);
   const pubSub = usePubSubContext();
   const [guess, setGuess] = useGuessEditContext() ?? [];
+  const [formError, setFormError] = useState<string | null>(null);
 
   const [method, action] = useMemo(
     () =>
@@ -24,10 +25,17 @@ export const useGuessForm = () => {
 
   console.log(guess, method, action);
 
-  const { error, isLoading, submit } = useLazyApi(
+  const { error: _, isLoading: __, submit } = useLazyApi(
     action,
     method as "PUT" | "POST",
   );
+
+  const resetForm = useCallback(() => {
+    if (dialogRef?.current?.open) {
+      pubSub?.publish(DIALOG_ACTIONS.CLOSE);
+    }
+    ref.current?.reset();
+  }, [dialogRef, pubSub]);
 
   useEffect(() => {
     if (guess) {
@@ -39,9 +47,13 @@ export const useGuessForm = () => {
 
       dialogRef?.current?.showModal();
     } else {
-      ref.current?.reset();
+      resetForm();
     }
-  }, [dialogRef, guess]);
+  }, [dialogRef, guess, pubSub, resetForm]);
+
+  const handleErrorClose = useCallback(() => {
+    setFormError(null);
+  }, []);
 
   const handleModalClose = useCallback((value?: string) => {
     if (value === DIALOG_ACTIONS.CLOSE) {
@@ -64,15 +76,24 @@ export const useGuessForm = () => {
   }, [handleModalClose, pubSub, pubSub?.subscribe]);
 
   const handleSubmit = useCallback(async (formState: FormState) => {
-    const { errors, maskedValues, valid: isValid } = formState;
+    const { errors: _, maskedValues, valid: isValid } = formState;
     if (isValid) {
-      const data = await submit(maskedValues as Record<string, string>);
-      console.log(data);
+      const res = await submit(maskedValues as Record<string, string>);
+      if (res.error) {
+        setFormError(res.error);
+      } else {
+        console.log(res.data);
+        setFormError(null);
+        setGuess(null);
+        resetForm();
+      }
     }
-  }, [submit]);
+  }, [resetForm, setGuess, submit]);
 
-  const handleSubmitFailure = useCallback((formState: FormState) => {
-    // TODO: add error handling;
+  const handleSubmitFailure = useCallback((_formState: FormState) => {
+    setFormError(
+      "Es sind Fehler aufgetreten. Schätzung konnte nicht abgeschickt werden.",
+    );
   }, []);
 
   const validateDate = useCallback(
@@ -88,7 +109,9 @@ export const useGuessForm = () => {
 
   return {
     action,
+    formError,
     guess,
+    handleErrorClose,
     handleSubmit,
     handleSubmitFailure,
     method,

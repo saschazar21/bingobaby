@@ -74,7 +74,7 @@ export const GuessTableEntry: FC<GuessTableEntryProps> = ({
     () =>
       birthdateContext?.isLockDateReached ||
       dateObject(guess.date) < dateObject(new Date().toISOString()),
-    [birthdateContext?.isLockDateReached, dateObject, guess.date]
+    [birthdateContext?.isLockDateReached, guess.date]
   );
 
   const className = classNames(customClassName, {

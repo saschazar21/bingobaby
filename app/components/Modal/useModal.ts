@@ -1,6 +1,7 @@
 import { usePubSubContext } from "@/contexts/PubSubContext";
 import { DIALOG_ACTIONS } from "@/utils/pubsub";
 import {
+  KeyboardEventHandler,
   MouseEventHandler,
   ReactEventHandler,
   RefObject,
@@ -68,9 +69,19 @@ export const useModal = (ref: RefObject<HTMLDialogElement>) => {
     [pubSub],
   );
 
+  const handleKeyUp: KeyboardEventHandler<HTMLDialogElement> = useCallback(
+    (e) => {
+      if (e.key === "Escape") {
+        (e.target as HTMLDialogElement).close();
+      }
+    },
+    [],
+  );
+
   return {
     handleClose,
     handleClick,
     handleDialogClose,
+    handleKeyUp,
   };
 };

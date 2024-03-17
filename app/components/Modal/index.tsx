@@ -6,8 +6,6 @@ import {
 } from "react";
 import { PiXBold } from "react-icons/pi";
 import { DialogContext } from "@/contexts/DialogContext";
-import { usePubSubContext } from "@/contexts/PubSubContext";
-import { DIALOG_ACTIONS } from "@/utils/pubsub";
 
 import styles from "./Modal.module.css";
 import { useModal } from "./useModal";
@@ -22,18 +20,20 @@ const ModalContent: ForwardRefRenderFunction<HTMLDialogElement, ModalProps> = (
   { children, heading, open },
   ref
 ) => {
-  const { handleClick, handleClose, handleDialogClose } = useModal(
+  const { handleClick, handleClose, handleDialogClose, handleKeyUp } = useModal(
     ref as RefObject<HTMLDialogElement>
   );
 
   return (
     <DialogContext.Provider value={ref as RefObject<HTMLDialogElement>}>
+      {/* eslint-disable-next-line jsx-a11y/no-noninteractive-element-interactions */}
       <dialog
         onClick={handleClick}
         onClose={handleDialogClose}
+        onKeyUp={handleKeyUp}
         ref={ref}
         className={styles.dialog}
-        open={open || undefined}
+        open={open ?? undefined}
       >
         <div className={styles.header}>
           <h2 className={styles.heading}>{heading}</h2>

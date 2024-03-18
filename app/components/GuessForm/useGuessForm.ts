@@ -1,4 +1,6 @@
 import { useDialogContext } from "@/contexts/DialogContext";
+import { useGuessContext } from "@/contexts/GuessContext";
+import { GUESS_ACTIONS } from "@/contexts/GuessContext/useGuesses";
 import { useGuessEditContext } from "@/contexts/GuessEditContext";
 import { usePubSubContext } from "@/contexts/PubSubContext";
 import { useLazyApi } from "@/hooks/useApi";
@@ -14,6 +16,7 @@ export const useGuessForm = () => {
   const dialogRef = useDialogContext();
   const ref = useRef<FormApi>(null);
   const pubSub = usePubSubContext();
+  const guesses = useGuessContext();
   const [guess, setGuess] = useGuessEditContext() ?? [];
   const [formError, setFormError] = useState<string | null>(null);
 
@@ -32,6 +35,7 @@ export const useGuessForm = () => {
     if (dialogRef?.current?.open) {
       pubSub?.publish(DIALOG_ACTIONS.CLOSE);
     }
+    setFormError(null);
     ref.current?.reset();
   }, [dialogRef, pubSub]);
 
@@ -75,17 +79,27 @@ export const useGuessForm = () => {
 
   const handleSubmit = useCallback(async (formState: FormState) => {
     const { errors: _, maskedValues, valid: isValid } = formState;
+    if (guess) {
+      if (guess.sex === maskedValues.sex && guess.date === maskedValues.date) {
+        setGuess(null);
+        return resetForm();
+      }
+    }
+
     if (isValid) {
       const res = await submit(maskedValues as Record<string, string>);
       if (res.error) {
         setFormError(res.error);
       } else {
-        setFormError(null);
+        guesses?.dispatch({
+          payload: res.data,
+          type: guess ? GUESS_ACTIONS.UPDATE_GUESS : GUESS_ACTIONS.ADD_GUESS,
+        });
         setGuess(null);
         resetForm();
       }
     }
-  }, [resetForm, setGuess, submit]);
+  }, [guess, guesses, resetForm, setGuess, submit]);
 
   const handleSubmitFailure = useCallback((_formState: FormState) => {
     setFormError(

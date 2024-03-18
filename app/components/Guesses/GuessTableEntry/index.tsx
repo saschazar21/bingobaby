@@ -35,6 +35,8 @@ export const GuessTableEntry: FC<GuessTableEntryProps> = ({
   );
 
   useEffect(() => {
+    setLastUpdatedAt(relativeTimeTo(dateObject(guess.updated_at), false));
+
     const interval = setInterval(
       () =>
         setLastUpdatedAt(relativeTimeTo(dateObject(guess.updated_at), false)),
@@ -59,7 +61,7 @@ export const GuessTableEntry: FC<GuessTableEntryProps> = ({
   const formattedDate = useMemo(
     () => (
       <time dateTime={dateObject(guess.date).format()}>
-        {dateObject(guess.date).format("D. MMMM YYYY, HH:mm")}
+        {dateObject(guess.date).format("DD. MMMM YYYY, HH:mm")}
       </time>
     ),
     [guess.date]
@@ -86,8 +88,12 @@ export const GuessTableEntry: FC<GuessTableEntryProps> = ({
       <div className={styles.icon} role="cell">
         {icon}
       </div>
-      <div role="cell">{formattedDate}</div>
-      <div role="cell">{lastUpdatedAt}</div>
+      <div role="cell">
+        <time dateTime={guess.date}>{formattedDate}</time>
+      </div>
+      <div role="cell">
+        <time dateTime={guess.updated_at}>{lastUpdatedAt}</time>
+      </div>
       <div className={styles.button} role="cell">
         <button disabled={isDisabled} type="button" onClick={handleSetGuess}>
           <span>Bearbeiten</span>

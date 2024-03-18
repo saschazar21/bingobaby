@@ -1,4 +1,9 @@
 /*
+Set timezone to UTC
+*/
+SET TIMEZONE TO 'utc';
+
+/*
 Create types if not exist
 */
 DO $$

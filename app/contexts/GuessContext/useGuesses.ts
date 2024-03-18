@@ -1,9 +1,10 @@
 import { Guess } from "@/deno/postgres/types";
+import { dateObject } from "@/utils/day";
 import { Dispatch, useReducer } from "react";
 
 export enum GUESS_ACTIONS {
   RESET = "RESET",
-  SET_GUESS = "SET_GUESS",
+  ADD_GUESS = "ADD_GUESS",
   UPDATE_GUESS = "UPDATE_GUESS",
 }
 
@@ -30,29 +31,26 @@ const reducer = (state: GuessState, action: GuessAction) => {
   switch (action.type) {
     case GUESS_ACTIONS.RESET:
       return initialState;
-    case GUESS_ACTIONS.SET_GUESS:
+    case GUESS_ACTIONS.ADD_GUESS:
       return {
         ...state,
         guesses: [
           ...state.guesses,
           action.payload,
-        ],
+        ].sort(({ date: aDate }, { date: bDate }) =>
+          dateObject(aDate).valueOf() - dateObject(bDate).valueOf()
+        ),
       };
     case GUESS_ACTIONS.UPDATE_GUESS:
-      const guesses = state.guesses.map((guess) => {
-        return guess.id === action.payload.id
-          ? {
-            ...guess,
-            ...action.payload,
-            id: guess.id,
-            updated_at: new Date().toISOString(),
-          }
-          : guess;
-      });
-
       return {
         ...state,
-        guesses,
+        guesses: [
+          ...state.guesses.map((guess) =>
+            guess.id === action.payload.id ? action.payload : guess
+          ),
+        ].sort(({ date: aDate }, { date: bDate }) =>
+          dateObject(aDate).valueOf() - dateObject(bDate).valueOf()
+        ),
       };
     default:
       return state;

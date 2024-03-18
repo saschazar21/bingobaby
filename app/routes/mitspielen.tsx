@@ -2,7 +2,7 @@ import { GuessTable } from "@/components/Guesses/GuessTable";
 import { Header } from "@/components/Header";
 import { UserInfo } from "@/components/UserInfo";
 import { BirthdateContext } from "@/contexts/BirthdateContext";
-import { GuessContextProvider } from "@/contexts/GuessContext";
+import { GuessContextProvider, useGuessContext } from "@/contexts/GuessContext";
 import { GuessEditContextProvider } from "@/contexts/GuessEditContext";
 import { Database } from "@/deno/postgres";
 import { Guess } from "@/deno/postgres/types";
@@ -11,7 +11,7 @@ import { ONE_HOUR } from "@/utils/day";
 import { ensureLoggedIn } from "@/utils/login";
 import { LoaderFunction, json } from "@netlify/remix-runtime";
 import { useLoaderData } from "@remix-run/react";
-import { FC, useContext, useEffect, useMemo, useState } from "react";
+import { FC, useContext, useEffect, useState } from "react";
 
 import styles from "./styles/mitspielen.module.css";
 
@@ -39,16 +39,13 @@ export const loader: LoaderFunction = async ({ request }) => {
   return data;
 };
 
-const Mitspielen: FC = () => {
-  const data = useLoaderData<{
-    guesses?: Guess[];
-    id?: string;
-    maxGuesses: number;
-  }>();
+const Info: FC = () => {
   const birthdateContext = useContext(BirthdateContext);
+  const data = useGuessContext();
   const [relativeTime, setRelativeTime] = useState<string>();
 
   const { isLockDateReached, lockDate } = birthdateContext ?? {};
+  const { state, maxGuesses = 0 } = data ?? {};
 
   useEffect(() => {
     let interval: NodeJS.Timeout;
@@ -66,41 +63,42 @@ const Mitspielen: FC = () => {
     };
   }, [lockDate]);
 
-  const info = useMemo(() => {
-    if (isLockDateReached) {
-      return (
-        <p>
-          Die Zeit für Änderungen an deinen Schätzungen ist bereits abgelaufen.
-          Folgende Schätzungen sind daher für die Auswertung gesetzt:
-        </p>
-      );
-    }
+  if (isLockDateReached) {
     return (
-      <>
-        {(data.guesses?.length ?? 0) < data.maxGuesses ? (
-          <p>
-            Du hast noch <b>{data.maxGuesses - (data.guesses?.length ?? 0)}</b>{" "}
-            von <b>{data.maxGuesses}</b> Schätzungen frei.{" "}
-          </p>
-        ) : (
-          ""
-        )}
-        <p>
-          Du bist nicht sicher? Du kannst deine Schätzungen bis zum{" "}
-          <time dateTime={lockDate?.format()}>
-            <strong>{relativeTime}</strong>
-          </time>{" "}
-          noch jederzeit ändern.
-        </p>
-      </>
+      <p>
+        Die Zeit für Änderungen an deinen Schätzungen ist bereits abgelaufen.
+        Folgende Schätzungen sind daher für die Auswertung gesetzt:
+      </p>
     );
-  }, [
-    data.guesses,
-    data.maxGuesses,
-    isLockDateReached,
-    lockDate,
-    relativeTime,
-  ]);
+  }
+  return (
+    <>
+      {(state?.guesses.length ?? 0) < maxGuesses ? (
+        <p>
+          Du hast noch <b>{maxGuesses - (state?.guesses.length ?? 0)}</b> von{" "}
+          <b>{maxGuesses}</b> Schätzungen frei.{" "}
+        </p>
+      ) : (
+        ""
+      )}
+      <p>
+        Du bist nicht sicher? Du kannst deine Schätzungen bis zum{" "}
+        <time dateTime={lockDate?.format()}>
+          <strong>{relativeTime}</strong>
+        </time>{" "}
+        noch jederzeit ändern. Bereits abgelaufene Schätzungen können
+        nachträglich jedoch <strong>nicht mehr geändert</strong> werden.
+      </p>
+    </>
+  );
+};
+
+const Mitspielen: FC = () => {
+  const data = useLoaderData<{
+    guesses?: Guess[];
+    id?: string;
+    maxGuesses: number;
+  }>();
 
   return (
     <GuessContextProvider guesses={data?.guesses} maxGuesses={data.maxGuesses}>
@@ -109,7 +107,7 @@ const Mitspielen: FC = () => {
       </Header>
       <main>
         <h1>Deine Schätzungen</h1>
-        {info}
+        <Info />
         <div className={styles.container}>
           <GuessEditContextProvider id={data.id}>
             <GuessTable />

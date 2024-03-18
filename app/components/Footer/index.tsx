@@ -11,7 +11,7 @@ export const Footer: FC = () => {
   const value = useBirthDateContext();
   const [relativeTime, setRelativeTime] = useState<string>();
 
-  const { calculatedBirthdate } = value ?? {};
+  const { birthdate, calculatedBirthdate } = value ?? {};
 
   useEffect(() => {
     let interval: NodeJS.Timeout;
@@ -40,33 +40,52 @@ export const Footer: FC = () => {
     ];
   }, [calculatedBirthdate]);
 
+  const birthdateInfo = useMemo(() => {
+    if (birthdate) {
+      return (
+        <span>
+          👶🏻 Unser Baby wurde am{" "}
+          <time dateTime={birthdate.toISOString()}>
+            <b>{semanticDate(birthdate)}</b>
+          </time>{" "}
+          geboren. 🎉😍 Danke für eure Teilnahme am Schätzspiel!
+        </span>
+      );
+    }
+
+    return isBirthdateInTheFuture ? (
+      <span>
+        ⏳ Noch ca. <b>{relativeTime}</b> bis zum errechneten Geburtstermin am{" "}
+        <time dateTime={isoString}>
+          <b>{semanticBirthdate}</b>
+        </time>
+        .
+      </span>
+    ) : (
+      <span>
+        ⌛ Es sind bereits <b>{relativeTime}</b> seit dem errechneten
+        Geburtstermin am{" "}
+        <time dateTime={isoString as string}>
+          <b>{semanticBirthdate}</b>
+        </time>{" "}
+        vergangen.
+      </span>
+    );
+  }, [
+    birthdate,
+    isBirthdateInTheFuture,
+    isoString,
+    relativeTime,
+    semanticBirthdate,
+  ]);
+
   if (!calculatedBirthdate) {
     return null;
   }
 
   return (
     <footer data-full-bleed>
-      <div className="container">
-        {isBirthdateInTheFuture ? (
-          <span>
-            ⏳ Noch ca. <b>{relativeTime}</b> bis zum errechneten Geburtstermin
-            am{" "}
-            <time dateTime={isoString}>
-              <b>{semanticBirthdate}</b>
-            </time>
-            .
-          </span>
-        ) : (
-          <span>
-            ⌛ Es sind bereits <b>{relativeTime}</b> seit dem errechneten
-            Geburtstermin am{" "}
-            <time dateTime={isoString as string}>
-              <b>{semanticBirthdate}</b>
-            </time>{" "}
-            vergangen.
-          </span>
-        )}
-      </div>
+      <div className="container">{birthdateInfo}</div>
     </footer>
   );
 };

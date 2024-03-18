@@ -61,7 +61,7 @@ export const GuessTableEntry: FC<GuessTableEntryProps> = ({
   const formattedDate = useMemo(
     () => (
       <time dateTime={dateObject(guess.date).format()}>
-        {dateObject(guess.date).format("DD. MMMM YYYY, HH:mm")}
+        {dateObject(guess.date).format("DD. MMMM YYYY [um] HH:mm [Uhr]")}
       </time>
     ),
     [guess.date]
@@ -74,9 +74,14 @@ export const GuessTableEntry: FC<GuessTableEntryProps> = ({
 
   const isDisabled = useMemo(
     () =>
-      birthdateContext?.isLockDateReached ||
+      !!birthdateContext?.birthdate ??
+      birthdateContext?.isLockDateReached ??
       dateObject(guess.date) < dateObject(new Date().toISOString()),
-    [birthdateContext?.isLockDateReached, guess.date]
+    [
+      birthdateContext?.birthdate,
+      birthdateContext?.isLockDateReached,
+      guess.date,
+    ]
   );
 
   const className = classNames(customClassName, {
@@ -92,9 +97,16 @@ export const GuessTableEntry: FC<GuessTableEntryProps> = ({
         <time dateTime={guess.date}>{formattedDate}</time>
       </div>
       <div role="cell">
-        <time dateTime={guess.updated_at}>{lastUpdatedAt}</time>
+        <time dateTime={guess.updated_at} data-no-print>
+          {lastUpdatedAt}
+        </time>
+        <time dateTime={guess.updated_at} data-print-only>
+          {dateObject(guess.updated_at).format(
+            "DD. MMMM YYYY [um] HH:mm [Uhr]"
+          )}
+        </time>
       </div>
-      <div className={styles.button} role="cell">
+      <div className={styles.button} role="cell" data-no-print>
         <button disabled={isDisabled} type="button" onClick={handleSetGuess}>
           <span>Bearbeiten</span>
           <PiPenBold role="presentation" />

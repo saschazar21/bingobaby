@@ -21,7 +21,7 @@ export const Header: FC<HeaderProps> = ({ children, video }) => {
   );
 
   return (
-    <header data-full-bleed>
+    <header data-full-bleed data-no-print>
       <div className={className}>
         <div>
           <video

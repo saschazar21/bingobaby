@@ -20,7 +20,7 @@ const GuessEditContext = createContext<
   [Guess | null, Dispatch<SetStateAction<Guess | null>>]
 >([
   null,
-  (value: ((prevState: Guess | null) => Guess | null) | Guess | null) => null,
+  (_value: ((prevState: Guess | null) => Guess | null) | Guess | null) => null,
 ]);
 
 export const useGuessEditContext = () => useContext(GuessEditContext);

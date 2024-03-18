@@ -46,7 +46,7 @@ const Index: FC = () => {
             <UserInfo />
           </>
         ) : (
-          <LoginForm prefix="top" autoFocus />
+          <LoginForm prefix="top" />
         )}
       </Header>
       <main>
@@ -81,7 +81,7 @@ const Index: FC = () => {
         </p>
       </main>
       {!session?.name ? (
-        <aside data-full-bleed>
+        <aside data-full-bleed data-no-print>
           <div className={className}>
             <LoginForm prefix="bottom" />
           </div>

@@ -1,4 +1,3 @@
-import { Database } from "@/deno/postgres";
 import { destroySession, getSession } from "@/utils/session";
 import { LoaderFunction, redirect } from "@netlify/remix-runtime";
 

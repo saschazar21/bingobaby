@@ -101,9 +101,23 @@ video {
   border-width: 0;
 }
 
+[data-print-only] {
+  display: none;
+}
+
 @media screen and (min-width: 860px) {
   body,
   .container {
     --padding: 0;
+  }
+}
+
+@media print {
+  [data-no-print] {
+    display: none;
+  }
+
+  [data-print-only] {
+    display: initial;
   }
 }

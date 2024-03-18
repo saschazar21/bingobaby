@@ -34,6 +34,7 @@ const ModalContent: ForwardRefRenderFunction<HTMLDialogElement, ModalProps> = (
         ref={ref}
         className={styles.dialog}
         open={open ?? undefined}
+        data-no-print
       >
         <div className={styles.header}>
           <h2 className={styles.heading}>{heading}</h2>

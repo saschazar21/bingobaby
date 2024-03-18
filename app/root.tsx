@@ -81,7 +81,9 @@ export default function App() {
 
   const value = useMemo(
     () => ({
-      ...(data.ENV.BIRTHDATE ? { birthdate: data.ENV.BIRTHDATE } : {}),
+      ...(data.ENV.BIRTHDATE
+        ? { birthdate: dateObject(data.ENV.BIRTHDATE) }
+        : {}),
       calculatedBirthdate: dateObject(data.ENV.CALCULATED_BIRTHDATE),
       isLockDateReached,
       lockDate: lockDate(data.ENV.CALCULATED_BIRTHDATE),

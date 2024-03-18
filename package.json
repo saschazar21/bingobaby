@@ -2,6 +2,7 @@
   "name": "bingobaby",
   "short_name": "Bingo, Baby",
   "description": "Wann kommt das Baby? Und was wird es? Melde dich an und rate mit!",
+  "color": "#f5cc5c",
   "private": true,
   "sideEffects": false,
   "type": "module",

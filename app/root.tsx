@@ -8,6 +8,7 @@ import {
 import { cssBundleHref } from "@remix-run/css-bundle";
 import {
   Links,
+  LiveReload,
   Meta,
   Outlet,
   Scripts,
@@ -136,7 +137,7 @@ export default function App() {
           sizes="16x16"
           href="/favicon-16x16.png"
         />
-        <link rel="manifest" href="/site.webmanifest" />
+        <link rel="manifest" href="/manifest.webmanifest" />
         <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#00667a" />
         <meta name="msapplication-TileColor" content={pkg.color} />
         <meta name="theme-color" content={pkg.color} />
@@ -152,6 +153,7 @@ export default function App() {
         </SessionContext.Provider>
         <ScrollRestoration />
         <Scripts />
+        <LiveReload />
       </body>
     </html>
   );

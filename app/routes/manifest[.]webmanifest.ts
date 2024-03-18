@@ -6,7 +6,7 @@ const manifest = {
   name: pkg.short_name,
   short_name: pkg.short_name,
   description: pkg.description,
-  start_url: "/",
+  start_url: "/?utm_source=pwa",
   lang: "de",
   scope: "/",
   theme_color: pkg.color,

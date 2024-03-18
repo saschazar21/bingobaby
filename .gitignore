@@ -1,3 +1,7 @@
+public/workbox-*
+public/sw.js*
+.DS_Store
+
 # Created by https://www.toptal.com/developers/gitignore/api/remix,node,remix+netlify
 # Edit at https://www.toptal.com/developers/gitignore?templates=remix,node,remix+netlify
 

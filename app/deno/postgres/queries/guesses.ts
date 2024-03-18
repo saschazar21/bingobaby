@@ -1,8 +1,5 @@
-import { MAX_DATE } from "../utils.ts";
+import { MAX_DATE, selectUtcTimestamp } from "../utils.ts";
 import { GUESSES } from "../types.d.ts";
-
-const selectUtcTimestamp = (column: string) =>
-  `${column} AT TIME ZONE 'utc' AS ${column}`;
 
 const SELECT_COLUMNS = [
   ["id", "id"],

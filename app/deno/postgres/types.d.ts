@@ -18,6 +18,7 @@ export interface Session {
 }
 
 export const BROWSERS = "browsers";
+export const DATES = "dates";
 export const GUESSES = "guesses";
 export const SESSIONS = "sessions";
 export const USERS = "users";

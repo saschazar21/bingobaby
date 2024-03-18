@@ -18,6 +18,7 @@ import {
 import { Footer } from "@/components/Footer";
 import { BirthdateContext } from "@/contexts/BirthdateContext";
 import { SessionContext } from "@/contexts/SessionContext";
+import { Database } from "@/deno/postgres";
 import { ONE_MINUTE, dateObject, lockDate } from "@/utils/day";
 import { destroySession, getSession } from "@/utils/session";
 
@@ -32,6 +33,8 @@ export const links: LinksFunction = () => [
 
 export const loader: LoaderFunction = async ({ request }) => {
   const session = await getSession(request.headers.get("cookie"));
+
+  const db = new Database(process.env.POSTGRES_CONNECTION_STRING);
 
   const values = {
     ENV: {

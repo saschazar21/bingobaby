@@ -2,6 +2,13 @@ import { generate } from "https://deno.land/std@0.218.2/uuid/v1.ts";
 import { Client } from "https://deno.land/x/postgres@v0.19.2/mod.ts";
 import { CREATE_BROWSER } from "./queries/browsers.ts";
 import {
+  ALL_DATES,
+  CREATE_DATE,
+  DATE_BY_ID,
+  DELETE_DATE_BY_ID,
+  UPDATE_DATE_BY_ID,
+} from "./queries/dates.ts";
+import {
   CREATE_GUESS,
   DELETE_GUESS_BY_ID,
   GUESS_BY_ID,
@@ -33,6 +40,10 @@ export class Database {
     this.client = new Client(connection);
   }
 
+  /*
+   * Guess section
+   * --------------------------------------------------------------------------
+   */
   async getGuess(id: string) {
     try {
       await this.client.connect();
@@ -283,6 +294,122 @@ export class Database {
     }
   }
 
+  /*
+   * Date section
+   * ----------------------------------------------------------------------------
+   */
+  async getDate(id: string) {
+    try {
+      await this.client.connect();
+
+      const { rows } = await this.client.queryObject<
+        Pick<Guess, "id" | "date">
+      >(DATE_BY_ID, [id]);
+
+      return rows[0] ?? null;
+    } catch (e) {
+      console.error(e);
+
+      throw new ServerError("Abrufen des Datums fehlgeschlagen.");
+    } finally {
+      await this.client.end();
+    }
+  }
+
+  async getAllDates() {
+    try {
+      await this.client.connect();
+
+      const { rows } = await this.client.queryObject<
+        Pick<Guess, "id" | "date">
+      >(ALL_DATES);
+
+      return rows;
+    } catch (e) {
+      console.error(e);
+
+      throw new ServerError("Abrufen der Daten fehlgeschlagen.");
+    } finally {
+      await this.client.end();
+    }
+  }
+
+  async createDate(data: Pick<Guess, "id" | "date">) {
+    try {
+      await this.client.connect();
+
+      const { rows } = await this.client.queryObject<
+        Pick<Guess, "id" | "date">
+      >(CREATE_DATE, [data]);
+
+      if (!rows.length ?? !rows[0]?.date) {
+        throw new ServerError("Anlegen des Datums fehlgeschlagen.");
+      }
+
+      return rows[0];
+    } catch (e) {
+      console.error(e);
+
+      throw (e.name === SERVER_ERROR)
+        ? e
+        : new ServerError("Anlegen des Datums fehlgeschlagen.");
+    } finally {
+      await this.client.end();
+    }
+  }
+
+  async updateDate(data: Pick<Guess, "id" | "date">) {
+    try {
+      await this.client.connect();
+
+      const { rows } = await this.client.queryObject<
+        Pick<Guess, "id" | "date">
+      >(UPDATE_DATE_BY_ID, [data]);
+
+      if (!rows.length ?? !rows[0]?.date) {
+        throw new ServerError("Ändern des Datums fehlgeschlagen.");
+      }
+
+      return rows[0];
+    } catch (e) {
+      console.error(e);
+
+      throw (e.name === SERVER_ERROR)
+        ? e
+        : new ServerError("Ändern des Datums fehlgeschlagen.");
+    } finally {
+      await this.client.end();
+    }
+  }
+
+  async deleteDate(id: string) {
+    try {
+      await this.client.connect();
+
+      const { rows } = await this.client.queryObject<
+        Pick<Guess, "id" | "date">
+      >(DELETE_DATE_BY_ID, [id]);
+
+      if (!rows.length ?? !rows[0].date) {
+        throw new ServerError("Löschen des Datums fehlgeschlagen.");
+      }
+
+      return rows[0];
+    } catch (e) {
+      console.error(e);
+
+      throw (e.name === SERVER_ERROR)
+        ? e
+        : new ServerError("Löschen des Datums fehlgeschlagen.");
+    } finally {
+      await this.client.end();
+    }
+  }
+
+  /*
+   * Session section
+   * --------------------------------------------------------------------------
+   */
   async getSession(id: string) {
     try {
       await this.client.connect();

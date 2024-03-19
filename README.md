@@ -1,68 +1,90 @@
-# Welcome to Remix!
+<div align="center">
+  <img alt="The icon of the website, showing stylized film perforations surrounding stylized diaphragm blades" src="public/android-chrome-512x512.png" width="192px" />
+  <br />
+  <h1><a href="https://bingobaby.sascha.app">Bingo, Baby</a></h1>
+  <strong>Wann kommt das Baby? Und was wird es? Melde dich an und rate mit! 👶🏻🗳️📅</strong>
+  <br />
+  <br />
+  <a href="https://github.com/saschazar21/bingobaby/actions/workflows/deploy.yml"><img alt="GitHub Actions: Deploy workflow" src="https://github.com/saschazar21/bingobaby/actions/workflows/deploy.yml/badge.svg" /></a> <img alt="License" src="https://img.shields.io/github/license/saschazar21/bingobaby" />
+  <br />
+  <br />
+  <br />
+</div>
 
-- [Remix Docs](https://remix.run/docs)
-- [Netlify Functions Overview](https://docs.netlify.com/functions/overview)
+## What is it?
 
-## Netlify Setup
+This repository contains the source code of a website containing a game for guessing a baby's time of birth created using the [Remix](https://remix.run) framework.
 
-1. Install the [Netlify CLI](https://docs.netlify.com/cli/get-started/):
+## Getting started
 
-```sh
-npm i -g netlify-cli
-```
+### Prerequisites
 
-If you have previously installed the Netlify CLI, you should update it to the latest version:
+The following prerequisites are needed to successfully launch this project locally:
 
-```sh
-npm i -g netlify-cli@latest
-```
+#### Runtimes
 
-2. Sign up and log in to Netlify:
+- [Node.js v20+](https://nodejs.org/en/)
 
-```sh
-netlify login
-```
+- [Yarn](https://yarnpkg.dev/) or similar
+- [Docker](https://docker.com) - for running a local PostgreSQL container (optional)
+- [Postman](https://www.postman.com/) - for interacting with the API (optional)
 
-3. Create a new site:
+#### Remote services
 
-```sh
-netlify init
-```
+- A hosted [PostgreSQL](https://www.postgresql.org/) database for storing guesses and user data, if not using Docker.
+  - The [schema.sql](schema.sql) file contains the database migrations for setting up a PostgreSQL database.
 
-## Development
+### Quick start
 
-Ensure all packages are installed by running:
+1. Copy `.env.sample` to `.env` and populate the environment variables
 
-```sh
-npm install
-```
+   ```bash
+   cp .env.sample .env
+   ```
 
-Run
+2. Install dependencies
 
-```sh
-netlify dev
-```
+   ```bash
+   yarn # or npm install
+   ```
 
-Open up [http://localhost:8888](http://localhost:8888), and you're ready to go!
+3. Run the build
 
-### Serve your site locally
+   ```bash
+   yarn build # or npm run build
+   ```
 
-To serve your site locally in a production-like environment, run
+4. Run the local server
 
-```sh
-netlify serve
-```
+   ```bash
+   yarn start # or npm start
+   ```
 
-Your site will be available at [http://localhost:8888](http://localhost:8888). Note that it will not auto-reload when you make changes.
+--- OR ---
+
+5. Run development preview
+
+   ```bash
+   yarn dev # or npm run dev
+   ```
 
 ## Deployment
 
-There are two ways to deploy your app to Netlify, you can either link your app to your git repo and have it auto deploy changes to Netlify, or you can deploy your app manually. If you've followed the setup instructions already, all you need to do is run this:
+### Prerequisites
 
-```sh
-# preview deployment
-netlify deploy --build
+- A [Netlify](https://netlify.com) account
 
-# production deployment
-netlify deploy --build --prod
-```
+  - Remix supports other integrations as well. Check out the [Remix website](https://remix.run/) for getting to know how to switch to another hosting provider.
+
+- Access to [GitHub Actions](https://docs.github.com/en/actions) for benefitting from an automated deployment integration (optional)
+
+  - If used, environment variables listed in `.env.sample` need to be set in the repository settings at GitHub accordingly.
+
+- A hosted [PostgreSQL](https://www.postgresql.org/) database for storing guesses and user data.
+  - The [schema.sql](schema.sql) file contains the database migrations for setting up a PostgreSQL database.
+
+## License
+
+Licensed under the MIT license.
+
+Copyright ©️ 2024 [Sascha Zarhuber](https://sascha.work)

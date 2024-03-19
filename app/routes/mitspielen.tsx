@@ -44,7 +44,7 @@ const Info: FC = () => {
   const data = useGuessContext();
   const [relativeTime, setRelativeTime] = useState<string>();
 
-  const { isLockDateReached, lockDate } = birthdateContext ?? {};
+  const { isGameOver, isLockDateReached, lockDate } = birthdateContext ?? {};
   const { state, maxGuesses = 0 } = data ?? {};
 
   useEffect(() => {
@@ -62,6 +62,18 @@ const Info: FC = () => {
       clearInterval(interval);
     };
   }, [lockDate]);
+
+  if (isGameOver) {
+    return (
+      <>
+        <p className="lead">Das Spiel ist aus. Danke für deine Teilnahme!</p>
+        <p>
+          Hier siehst du deine Schätzungen, die für die Wertung herangezogen
+          wurden:
+        </p>
+      </>
+    );
+  }
 
   if (isLockDateReached) {
     return (

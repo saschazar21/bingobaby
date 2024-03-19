@@ -39,11 +39,19 @@
   font-weight: var(--font-weight-bold);
 }
 
+.row [data-offset] {
+  display: none;
+}
+
 @media screen and (min-width: 860px) {
   .row {
     grid-template-columns: minmax(75px, 0.5fr) minmax(150px, 1fr) repeat(
         2,
         minmax(75px, 0.75fr)
       );
+  }
+
+  .row [data-offset] {
+    display: block;
   }
 }

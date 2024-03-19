@@ -1,5 +1,6 @@
 import { GuessForm } from "@/components/GuessForm";
 import { Modal } from "@/components/Modal";
+import { useBirthDateContext } from "@/contexts/BirthdateContext";
 import { useGuessContext } from "@/contexts/GuessContext";
 import { useGuessEditContext } from "@/contexts/GuessEditContext";
 import { PubSubContextProvider } from "@/contexts/PubSubContext";
@@ -13,6 +14,7 @@ export interface GuessTableProps {}
 
 export const GuessTable: FC<GuessTableProps> = () => {
   const ref = useRef<HTMLDialogElement>(null);
+  const birthdateContext = useBirthDateContext();
   const data = useGuessContext();
   const [guess] = useGuessEditContext() ?? [];
 
@@ -39,12 +41,23 @@ export const GuessTable: FC<GuessTableProps> = () => {
               Geburtszeitpunkt
             </div>
             <div role="columnheader">Zuletzt geändert</div>
+            {birthdateContext?.isGameOver ? (
+              <div role="columnheader" data-offset>
+                Abweichung
+              </div>
+            ) : null}
           </div>
           {guesses}
         </div>
       ) : null}
-      {(data?.maxGuesses ?? 0) > (data?.state.guesses.length ?? 0) ? (
-        <button onClick={handleOpenDialog} type="button">
+      {!birthdateContext?.isGameOver &&
+      !birthdateContext?.isLockDateReached &&
+      (data?.maxGuesses ?? 0) > (data?.state.guesses.length ?? 0) ? (
+        <button
+          onClick={handleOpenDialog}
+          type="button"
+          disabled={birthdateContext?.isGameOver}
+        >
           <span>Neue Schätzung</span> <PiPlusCircleBold role="presentation" />
         </button>
       ) : null}

@@ -29,24 +29,32 @@ export const Footer: FC = () => {
     };
   }, [calculatedBirthdate]);
 
-  const [isBirthdateInTheFuture, isoString, semanticBirthdate] = useMemo(() => {
+  const [
+    isBirthdateInTheFuture,
+    birthdateString,
+    calculatedBirthdateString,
+    semanticBirthdate,
+    semanticCalculatedBirthdate,
+  ] = useMemo(() => {
     if (!calculatedBirthdate) {
       return [null, null, null];
     }
     return [
       isAfterToday(calculatedBirthdate),
+      birthdate ? birthdate.toISOString() : null,
       calculatedBirthdate.format("YYYY-MM-DD"),
+      birthdate ? birthdate.format("DD. MMMM YYYY [um] HH:mm [Uhr]") : null,
       semanticDate(calculatedBirthdate),
     ];
-  }, [calculatedBirthdate]);
+  }, [birthdate, calculatedBirthdate]);
 
   const birthdateInfo = useMemo(() => {
-    if (birthdate) {
+    if (birthdateString) {
       return (
         <span>
           👶🏻 Unser Baby wurde am{" "}
-          <time dateTime={birthdate.toISOString()}>
-            <b>{semanticDate(birthdate)}</b>
+          <time dateTime={birthdateString}>
+            <b>{semanticBirthdate}</b>
           </time>{" "}
           geboren. 🎉😍 Danke für eure Teilnahme am Schätzspiel!
         </span>
@@ -56,8 +64,8 @@ export const Footer: FC = () => {
     return isBirthdateInTheFuture ? (
       <span>
         ⏳ Noch ca. <b>{relativeTime}</b> bis zum errechneten Geburtstermin am{" "}
-        <time dateTime={isoString}>
-          <b>{semanticBirthdate}</b>
+        <time dateTime={calculatedBirthdateString}>
+          <b>{semanticCalculatedBirthdate}</b>
         </time>
         .
       </span>
@@ -65,17 +73,18 @@ export const Footer: FC = () => {
       <span>
         ⌛ Es sind bereits <b>{relativeTime}</b> seit dem errechneten
         Geburtstermin am{" "}
-        <time dateTime={isoString as string}>
-          <b>{semanticBirthdate}</b>
+        <time dateTime={calculatedBirthdateString as string}>
+          <b>{semanticCalculatedBirthdate}</b>
         </time>{" "}
         vergangen.
       </span>
     );
   }, [
-    birthdate,
+    birthdateString,
     isBirthdateInTheFuture,
-    isoString,
     relativeTime,
+    calculatedBirthdateString,
+    semanticCalculatedBirthdate,
     semanticBirthdate,
   ]);
 

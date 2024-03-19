@@ -126,6 +126,22 @@ export class Database {
 
       await transaction.begin();
 
+      const { rows: dateRows } = await transaction.queryObject<
+        Pick<Guess, "id" | "date">
+      >(DATE_BY_ID, ["birthdate"]);
+
+      if (
+        dateRows[0]?.date &&
+        dateObject(new Date().toISOString()) > dateObject(dateRows[0].date)
+      ) {
+        await transaction.rollback();
+
+        throw new ServerError(
+          "Das Spiel ist bereits beendet. Danke für deine Teilnahme!",
+          400,
+        );
+      }
+
       const { rows: guesses } = await transaction.queryObject<Guess>(
         GUESSES_BY_NAME,
         [data.name],
@@ -192,6 +208,22 @@ export class Database {
       const transaction = this.client.createTransaction("create_guess");
 
       await transaction.begin();
+
+      const { rows: dateRows } = await transaction.queryObject<
+        Pick<Guess, "id" | "date">
+      >(DATE_BY_ID, ["birthdate"]);
+
+      if (
+        dateRows[0]?.date &&
+        dateObject(new Date().toISOString()) > dateObject(dateRows[0].date)
+      ) {
+        await transaction.rollback();
+
+        throw new ServerError(
+          "Das Spiel ist bereits beendet. Danke für deine Teilnahme!",
+          400,
+        );
+      }
 
       const { rows: guesses } = await transaction.queryObject<Guess>(
         GUESSES_BY_NAME,

@@ -74,18 +74,36 @@ export const GuessTableEntry: FC<GuessTableEntryProps> = ({
 
   const isDisabled = useMemo(
     () =>
-      !!birthdateContext?.birthdate ??
+      birthdateContext?.isGameOver ??
       birthdateContext?.isLockDateReached ??
       dateObject(guess.date) < dateObject(new Date().toISOString()),
     [
-      birthdateContext?.birthdate,
+      birthdateContext?.isGameOver,
       birthdateContext?.isLockDateReached,
       guess.date,
     ]
   );
 
+  const offset = useMemo(() => {
+    if (!birthdateContext?.birthdate) {
+      return null;
+    }
+
+    const offsetHours = Math.abs(
+      dateObject(guess.date).diff(birthdateContext?.birthdate, "hours")
+    );
+
+    if (offsetHours < 72) {
+      return `${offsetHours} Stunde${offsetHours > 1 ? "n" : ""}`;
+    }
+    const offsetDays = Math.abs(
+      dateObject(guess.date).diff(birthdateContext?.birthdate, "days", true)
+    );
+    return `ca. ${Math.round(offsetDays)} Tage`;
+  }, [birthdateContext?.birthdate, guess.date]);
+
   const className = classNames(customClassName, {
-    [styles.disabled]: isDisabled,
+    [styles.disabled]: isDisabled && !birthdateContext?.isGameOver,
   });
 
   return (
@@ -106,12 +124,18 @@ export const GuessTableEntry: FC<GuessTableEntryProps> = ({
           )}
         </time>
       </div>
-      <div className={styles.button} role="cell" data-no-print>
-        <button disabled={isDisabled} type="button" onClick={handleSetGuess}>
-          <span>Bearbeiten</span>
-          <PiPenBold role="presentation" />
-        </button>
-      </div>
+      {!birthdateContext?.isGameOver ? (
+        <div className={styles.button} role="cell" data-no-print>
+          <button disabled={isDisabled} type="button" onClick={handleSetGuess}>
+            <span>Bearbeiten</span>
+            <PiPenBold role="presentation" />
+          </button>
+        </div>
+      ) : (
+        <div role="cell" data-offset>
+          {offset}
+        </div>
+      )}
     </div>
   );
 };

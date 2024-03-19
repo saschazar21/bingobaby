@@ -4,6 +4,7 @@ import { createContext, useContext } from "react";
 export interface BirthdateContextValue {
   birthdate?: Dayjs | null;
   calculatedBirthdate: Dayjs;
+  isGameOver: boolean;
   isLockDateReached: boolean;
   lockDate: Dayjs;
 }

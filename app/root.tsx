@@ -19,6 +19,7 @@ import { Footer } from "@/components/Footer";
 import { BirthdateContext } from "@/contexts/BirthdateContext";
 import { SessionContext } from "@/contexts/SessionContext";
 import { Database } from "@/deno/postgres";
+import { BIRTHDATE } from "@/utils/constants";
 import { ONE_MINUTE, dateObject, lockDate } from "@/utils/day";
 import { destroySession, getSession } from "@/utils/session";
 
@@ -36,9 +37,13 @@ export const loader: LoaderFunction = async ({ request }) => {
 
   const db = new Database(process.env.POSTGRES_CONNECTION_STRING);
 
+  const birthdate: { id: string; date: string } | null = await db
+    .getDate(BIRTHDATE)
+    .catch(() => null);
+
   const values = {
     ENV: {
-      BIRTHDATE: process.env.BIRTHDATE,
+      BIRTHDATE: birthdate?.date ?? null,
       CALCULATED_BIRTHDATE: process.env.CALCULATED_BIRTHDATE,
     },
   };
@@ -86,8 +91,8 @@ export default function App() {
   const value = useMemo(
     () => ({
       ...(data.ENV.BIRTHDATE
-        ? { birthdate: dateObject(data.ENV.BIRTHDATE) }
-        : {}),
+        ? { birthdate: dateObject(data.ENV.BIRTHDATE), isGameOver: true }
+        : { isGameOver: false }),
       calculatedBirthdate: dateObject(data.ENV.CALCULATED_BIRTHDATE),
       isLockDateReached,
       lockDate: lockDate(data.ENV.CALCULATED_BIRTHDATE),

@@ -86,7 +86,7 @@ const Info: FC = () => {
   return (
     <>
       {(state?.guesses.length ?? 0) < maxGuesses ? (
-        <p>
+        <p className="lead">
           Du hast noch <b>{maxGuesses - (state?.guesses.length ?? 0)}</b> von{" "}
           <b>{maxGuesses}</b> Schätzungen frei.{" "}
         </p>

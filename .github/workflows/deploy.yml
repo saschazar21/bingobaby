@@ -1,0 +1,101 @@
+name: Deploy
+
+env:
+  NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
+  NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    types:
+      - opened
+      - synchronize
+
+jobs:
+  deploy:
+    name: Deploy
+    permissions:
+      pull-requests: write
+    runs-on: ubuntu-latest
+    if: "!contains(github.event.head_commit.message, 'skip ci')"
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+
+      - name: Set outputs
+        id: vars
+        run: |
+          SHORT_SHA=$(git rev-parse --short HEAD)
+          echo "SHORT_SHA=$SHORT_SHA" >> $GITHUB_OUTPUT
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version-file: ".tool-versions"
+
+      - name: Cache node_modules
+        uses: actions/cache@v3
+        with:
+          path: node_modules
+          key: yarn-deps-${{ hashFiles('yarn.lock') }}
+
+      - name: Install dependencies
+        run: yarn --frozen-lockfile
+
+      - name: Deploy to production
+        if: ${{ startsWith(github.ref, 'refs/heads/main') }}
+        run: |
+          netlify build \
+            --context production \
+            --telemetry-disable
+          netlify deploy \
+            --prod \
+            --telemetry-disable
+
+      - name: Deploy preview
+        id: preview
+        if: ${{ github.event.pull_request.state == 'open' }}
+        env:
+          DEPLOYMENT_URL: ${{ format('https://{0}--bingobaby-sascha-app.netlify.app', steps.vars.outputs.SHORT_SHA) }}
+        run: |
+          netlify build \
+            --context deploy-preview \
+            --telemetry-disable
+          netlify deploy \
+            --alias ${{ steps.vars.outputs.SHORT_SHA }} \
+            --telemetry-disable
+
+      - name: Update comment on PR
+        if: ${{ github.event.pull_request.state == 'open' }}
+        env:
+          DEPLOYMENT_URL: ${{ format('https://{0}--bingobaby-sascha-app.netlify.app', steps.vars.outputs.SHORT_SHA) }}
+        uses: actions/github-script@v6
+        with:
+          script: |
+            // Find previous comment
+            const { data: comments } = await github.rest.issues.listComments({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo
+            });
+            const comment = comments.find(({ body }) => body.startsWith('Deployment preview ready!'));
+
+            // Remove comment
+            comment && await github.rest.issues.deleteComment({
+              comment_id: comment.id,
+              owner: context.repo.owner,
+              repo: context.repo.repo
+            });
+
+            // Add comment
+            await github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: "Deployment preview ready!\n\n[${{ env.DEPLOYMENT_URL }}](${{ env.DEPLOYMENT_URL }})"
+            });

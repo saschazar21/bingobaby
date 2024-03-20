@@ -65,7 +65,7 @@ jobs:
         if: ${{ github.event.pull_request.state == 'open' }}
         run: |
           netlify deploy \
-            --build
+            --build \
             --context deploy-preview \
             --telemetry-disable \
             --json \

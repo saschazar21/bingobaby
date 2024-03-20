@@ -52,7 +52,73 @@ export const ensureLoggedIn = async (request: Request) => {
   return session.get("name") as string;
 };
 
+export const parseBasicAuth = (request: Request) => {
+  const { pathname } = new URL(request.url);
+  const auth = request.headers.get("authorization");
+
+  const regex = /^Basic (?<credentials>.+?)$/;
+
+  if (!auth || !regex.test(auth)) {
+    throw json({ error: "No authorization header present." }, {
+      status: 401,
+      headers: {
+        "www-authenticate": `Basic realm=${pathname}, charset="UTF-8"`,
+      },
+    });
+  }
+
+  const { groups } = regex.exec(auth) as RegExpExecArray;
+
+  try {
+    const decoded = atob(groups?.credentials ?? "");
+
+    return decoded.split(":");
+  } catch (e) {
+    throw json({
+      error: "Error while decoding base64-encoded authorization header.",
+    });
+  }
+};
+
+export const validateBasicAuth = (
+  request: Request,
+  password = process.env.MASTER_PASSWORD,
+  user?: string,
+) => {
+  const { pathname } = new URL(request.url);
+  const [u, p] = parseBasicAuth(request);
+
+  try {
+    if (p !== password) {
+      throw new Error("Wrong password.");
+    }
+
+    if (user && u !== user) {
+      throw new Error("Wrong username.");
+    }
+
+    return [u, p];
+  } catch (e) {
+    throw json({ error: "Wrong username/password combination" }, {
+      status: 401,
+      headers: {
+        "www-authenticate": `Basic realm=${pathname}, charset="UTF-8"`,
+      },
+    });
+  }
+};
+
 export const getUser = async (request: Request) => {
+  try {
+    const [user] = validateBasicAuth(request);
+
+    if (user) {
+      return user;
+    }
+  } catch (_e) {
+    // Intentionally left empty, regular session validation below will determine further progress
+  }
+
   const { pathname } = new URL(request.url);
   const session = await getSession(request.headers.get("cookie"));
 

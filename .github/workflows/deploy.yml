@@ -71,6 +71,7 @@ jobs:
             --telemetry-disable
           netlify deploy \
             --alias ${{ steps.vars.outputs.SHORT_SHA }} \
+            --context deploy-preview \
             --telemetry-disable
 
       - name: Update comment on PR

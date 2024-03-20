@@ -34,6 +34,36 @@ The following prerequisites are needed to successfully launch this project local
 - A hosted [PostgreSQL](https://www.postgresql.org/) database for storing guesses and user data, if not using Docker.
   - The [schema.sql](schema.sql) file contains the database migrations for setting up a PostgreSQL database.
 
+#### Populating the `users` table
+
+In order to provide a login functionality, any eligible participant has to be manually entered into the database upfront.
+
+##### Adding a single user
+
+A single user may be added using the following SQL statement:
+
+```sql
+INSERT INTO users (name) VALUES ('John Doe');
+```
+
+##### Adding multiple users in batch mode
+
+Multiple users may be added at once using a `.csv` file in the following format:
+
+```csv
+name
+Jane Doe
+John Doe
+```
+
+Afterwards, the following SQL statement may be used to import the users from the `.csv` file:
+
+```sql
+COPY users (name)
+FROM 'the-csv-file.csv'
+DELIMITER ',' CSV HEADER;
+```
+
 ### Quick start
 
 1. Copy `.env.sample` to `.env` and populate the environment variables

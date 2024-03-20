@@ -37,7 +37,6 @@ export class Database {
   }
 
   constructor(connection: string) {
-    console.log(connection);
     this.client = new Client(connection);
   }
 

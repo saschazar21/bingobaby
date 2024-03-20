@@ -1,4 +1,4 @@
-import { applyTimezone, dateObject } from "./day";
+import { dateObject } from "./day";
 
 export const validateLength = (name: string) => {
   if (!name?.length) {
@@ -14,8 +14,7 @@ export const validateSegments = (name: string) => {
 
 export const validateAgainstPastDate = (date: string) => {
   if (
-    applyTimezone(dateObject(date)) <
-      applyTimezone(dateObject(new Date().toISOString()))
+    dateObject(date) < dateObject(new Date().toISOString())
   ) {
     throw new Error("Gewähltes Datum kann nicht in der Vergangenheit liegen.");
   }

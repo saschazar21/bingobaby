@@ -30,11 +30,7 @@ export const semanticDate = (date: Dayjs) => {
 };
 
 export const dateObject = (dateString: string) => {
-  return dayjs(dateString);
-};
-
-export const applyTimezone = (date: Dayjs, tz = DEFAULT_TIMEZONE) => {
-  return date.tz(tz);
+  return dayjs(dateString).tz(DEFAULT_TIMEZONE);
 };
 
 export const lockDate = (dateString: string) => {

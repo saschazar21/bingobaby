@@ -74,7 +74,7 @@ jobs:
       - name: Update comment on PR
         if: ${{ github.event.pull_request.state == 'open' }}
         env:
-          DEPLOYMENT_URL: ${{ jq -r '.deploy_url' deploy.json }}
+          DEPLOYMENT_URL: $(jq -r '.deploy_url' deploy.json)
         uses: actions/github-script@v6
         with:
           script: |

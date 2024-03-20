@@ -1,4 +1,4 @@
-import { applyTimezone, dateObject } from "@/utils/day";
+import { dateObject } from "@/utils/day";
 import { FieldProps, useField } from "informed";
 import { ChangeEventHandler, useCallback, useMemo } from "react";
 
@@ -26,7 +26,7 @@ export const useDateTime = (props: FieldProps<UserProps>) => {
 
   const handleChange: ChangeEventHandler<HTMLInputElement> = useCallback(
     (e) => {
-      const parsedDate = applyTimezone(dateObject(e.target.value)).utc()
+      const parsedDate = dateObject(e.target.value).utc()
         .toISOString();
       setValue(parsedDate, e);
     },
@@ -34,7 +34,7 @@ export const useDateTime = (props: FieldProps<UserProps>) => {
   );
 
   const parsedValue = useMemo(() => {
-    const dateTime = applyTimezone(dateObject(value as string)).format(
+    const dateTime = dateObject(value as string).format(
       "YYYY-MM-DDTHH:mm",
     );
     return dateTime;

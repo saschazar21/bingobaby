@@ -30,7 +30,8 @@
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-icons": "^5.0.1",
-    "ua-parser-js": "^2.0.0-beta.2"
+    "ua-parser-js": "^2.0.0-beta.2",
+    "uid": "^2.0.2"
   },
   "devDependencies": {
     "@remix-run/dev": "^2.8.1",

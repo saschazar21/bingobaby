@@ -31,7 +31,10 @@ jobs:
         id: vars
         run: |
           SHORT_SHA=$(git rev-parse --short HEAD)
+          COMMIT_MESSAGE=$(git log -1 --no-merges --pretty=%B)
           echo "SHORT_SHA=$SHORT_SHA" >> $GITHUB_OUTPUT
+          echo "COMMIT_MESSAGE=$COMMIT_MESSAGE" >> $GITHUB_OUTPUT
+          echo $SHORT_SHA $COMMIT_MESSAGE
 
       - name: Set up Node.js
         uses: actions/setup-node@v3
@@ -47,6 +50,9 @@ jobs:
       - name: Install dependencies
         run: yarn --frozen-lockfile
 
+      - name: Run linter
+        run: yarn lint
+
       - name: Deploy to production
         if: ${{ startsWith(github.ref, 'refs/heads/main') }}
         run: |
@@ -54,26 +60,29 @@ jobs:
             --context production \
             --telemetry-disable
           netlify deploy \
+            --message "${{ steps.vars.outputs.COMMIT_MESSAGE }}" \
             --prod \
             --telemetry-disable
 
       - name: Deploy preview
         id: preview
         if: ${{ github.event.pull_request.state == 'open' }}
-        env:
-          DEPLOYMENT_URL: ${{ format('https://{0}--bingobaby-sascha-app.netlify.app', steps.vars.outputs.SHORT_SHA) }}
         run: |
-          netlify build \
-            --context deploy-preview \
-            --telemetry-disable
           netlify deploy \
-            --alias ${{ steps.vars.outputs.SHORT_SHA }} \
-            --telemetry-disable
+            --message "${{ steps.vars.outputs.COMMIT_MESSAGE }}" \
+            --build \
+            --context deploy-preview \
+            --telemetry-disable \
+            --json \
+            > deploy.json
+          DEPLOYMENT_URL=$(jq -r '.deploy_url' deploy.json)
+          echo "DEPLOYMENT_URL=$DEPLOYMENT_URL" >> "$GITHUB_OUTPUT"
+          jq '.' deploy.json
 
       - name: Update comment on PR
         if: ${{ github.event.pull_request.state == 'open' }}
         env:
-          DEPLOYMENT_URL: ${{ format('https://{0}--bingobaby-sascha-app.netlify.app', steps.vars.outputs.SHORT_SHA) }}
+          DEPLOYMENT_URL: ${{ steps.preview.outputs.DEPLOYMENT_URL }}
         uses: actions/github-script@v6
         with:
           script: |

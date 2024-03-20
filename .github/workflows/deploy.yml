@@ -57,6 +57,7 @@ jobs:
             --context production \
             --telemetry-disable
           netlify deploy \
+            --message ${{ github.event.head_commit.message }} \
             --prod \
             --telemetry-disable
 
@@ -65,16 +66,20 @@ jobs:
         if: ${{ github.event.pull_request.state == 'open' }}
         run: |
           netlify deploy \
+            --message ${{ github.event.head_commit.message }} \
             --build \
             --context deploy-preview \
             --telemetry-disable \
             --json \
             > deploy.json
+          DEPLOYMENT_URL=$(jq -r '.deploy_url' deploy.json)
+          echo "DEPLOYMENT_URL=$DEPLOYMENT_URL" >> "$GITHUB_OUTPUT"
+          jq '.' deploy.json
 
       - name: Update comment on PR
         if: ${{ github.event.pull_request.state == 'open' }}
         env:
-          DEPLOYMENT_URL: $(jq -r '.deploy_url' deploy.json)
+          DEPLOYMENT_URL: ${{ steps.preview.outputs.DEPLOYMENT_URL }}
         uses: actions/github-script@v6
         with:
           script: |

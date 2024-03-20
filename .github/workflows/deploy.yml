@@ -63,21 +63,18 @@ jobs:
       - name: Deploy preview
         id: preview
         if: ${{ github.event.pull_request.state == 'open' }}
-        env:
-          DEPLOYMENT_URL: ${{ format('https://{0}--bingobaby-sascha-app.netlify.app', steps.vars.outputs.SHORT_SHA) }}
         run: |
-          netlify build \
-            --context deploy-preview \
-            --telemetry-disable
           netlify deploy \
-            --alias ${{ steps.vars.outputs.SHORT_SHA }} \
+            --build
             --context deploy-preview \
-            --telemetry-disable
+            --telemetry-disable \
+            --json \
+            > deploy.json
 
       - name: Update comment on PR
         if: ${{ github.event.pull_request.state == 'open' }}
         env:
-          DEPLOYMENT_URL: ${{ format('https://{0}--bingobaby-sascha-app.netlify.app', steps.vars.outputs.SHORT_SHA) }}
+          DEPLOYMENT_URL: ${{ jq -r '.deploy_url' deploy.json }}
         uses: actions/github-script@v6
         with:
           script: |

@@ -11,7 +11,7 @@ export const Footer: FC = () => {
   const value = useBirthDateContext();
   const [relativeTime, setRelativeTime] = useState<string>();
 
-  const { birthdate, calculatedBirthdate } = value ?? {};
+  const { birthdate, calculatedBirthdate, sex } = value ?? {};
 
   useEffect(() => {
     let interval: NodeJS.Timeout;
@@ -52,7 +52,7 @@ export const Footer: FC = () => {
     if (birthdateString) {
       return (
         <span>
-          👶🏻 Unser Baby wurde am{" "}
+          👶🏻 Unser {sex === "female" ? "Mädchen" : "Bub"} wurde am{" "}
           <time dateTime={birthdateString}>
             <b>{semanticBirthdate}</b>
           </time>{" "}
@@ -85,6 +85,7 @@ export const Footer: FC = () => {
     relativeTime,
     calculatedBirthdateString,
     semanticCalculatedBirthdate,
+    sex,
     semanticBirthdate,
   ]);
 

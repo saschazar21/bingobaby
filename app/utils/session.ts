@@ -1,7 +1,14 @@
 import { Database } from "@/deno/postgres";
-import { createSessionStorage } from "@netlify/remix-runtime";
-import { sessionCookie } from "./cookie";
+import {
+  createCookieSessionStorage,
+  createSessionStorage,
+} from "@netlify/remix-runtime";
+import { adminCookie, sessionCookie } from "./cookie";
 import { Browser } from "./browser";
+
+export interface AdminSessionData {
+  isAdmin: boolean;
+}
 
 export interface SessionData {
   browser: Browser;
@@ -76,3 +83,10 @@ export const { getSession, commitSession, destroySession } =
     updateData,
     deleteData,
   });
+
+export const adminSession = createCookieSessionStorage<
+  AdminSessionData,
+  SessionFlashData
+>({
+  cookie: adminCookie,
+});

@@ -23,7 +23,13 @@ import {
   SESSION_BY_ID,
   UPDATE_SESSION_BY_ID,
 } from "./queries/sessions.ts";
-import { Guess, Session } from "./types.d.ts";
+import {
+  Guess,
+  GuessAnonymous,
+  GuessData,
+  GuessInput,
+  Session,
+} from "./types.d.ts";
 import { dateObject, LOCK_DATE } from "./utils.ts";
 import { Browser } from "../../utils/browser.ts";
 import { MAX_GUESSES } from "../../utils/constants.ts";
@@ -100,7 +106,7 @@ export class Database {
     }
   }
 
-  async createGuess(data: Omit<Guess, "id" | "created_at" | "updated_at">) {
+  async createGuess(data: GuessInput) {
     if (dateObject(new Date().toISOString()) > LOCK_DATE) {
       throw new ServerError(
         `Seit ${
@@ -157,13 +163,13 @@ export class Database {
       }
 
       const { rows } = await transaction.queryObject<
-        Pick<Guess, "id" | "date" | "sex">
+        Omit<GuessAnonymous, "created_at">
       >(
         CREATE_GUESS,
         [Database.generateUUID(), data.name, data.date, data.sex],
       );
 
-      if (!rows.length ?? !rows[0]?.id) {
+      if (!rows[0]?.id) {
         await transaction.rollback();
 
         throw new ServerError("Schätzung konnte nicht angelegt werden.");
@@ -183,7 +189,7 @@ export class Database {
     }
   }
 
-  async updateGuess(data: Partial<Guess> & Pick<Guess, "id" | "name">) {
+  async updateGuess(data: Partial<GuessData> & Pick<Guess, "id" | "name">) {
     if (dateObject(new Date().toISOString()) > LOCK_DATE) {
       throw new ServerError(
         `Seit ${
@@ -210,7 +216,7 @@ export class Database {
       await transaction.begin();
 
       const { rows: dateRows } = await transaction.queryObject<
-        Pick<Guess, "id" | "date">
+        Pick<GuessData, "id" | "date">
       >(DATE_BY_ID, ["birthdate"]);
 
       if (
@@ -250,14 +256,12 @@ export class Database {
         );
       }
 
-      const { rows } = await transaction.queryObject<
-        Pick<Guess, "id" | "date" | "sex">
-      >(
+      const { rows } = await transaction.queryObject<GuessData>(
         UPDATE_GUESS_BY_ID,
         [data.id, data.date, data.sex],
       );
 
-      if (!rows.length ?? !rows[0]?.id) {
+      if (!rows[0]?.id) {
         await transaction.rollback();
 
         throw new ServerError("Schätzung konnte nicht geändert werden.");
@@ -299,14 +303,12 @@ export class Database {
         );
       }
 
-      const { rows } = await transaction.queryObject<
-        Pick<Guess, "id">
-      >(
+      const { rows } = await transaction.queryObject<Pick<Guess, "id">>(
         DELETE_GUESS_BY_ID,
         [data.id],
       );
 
-      if (!rows.length ?? !rows[0]?.id) {
+      if (!rows[0]?.id) {
         await transaction.rollback();
 
         throw new ServerError("Schätzung konnte nicht gelöscht werden.");
@@ -334,9 +336,9 @@ export class Database {
     try {
       await this.client.connect();
 
-      const { rows } = await this.client.queryObject<
-        Pick<Guess, "id" | "date">
-      >(DATE_BY_ID, [id]);
+      const { rows } = await this.client.queryObject<GuessData>(DATE_BY_ID, [
+        id,
+      ]);
 
       return rows[0] ?? null;
     } catch (e) {
@@ -352,9 +354,7 @@ export class Database {
     try {
       await this.client.connect();
 
-      const { rows } = await this.client.queryObject<
-        Pick<Guess, "id" | "date">
-      >(ALL_DATES);
+      const { rows } = await this.client.queryObject<GuessData>(ALL_DATES);
 
       return rows;
     } catch (e) {
@@ -366,15 +366,17 @@ export class Database {
     }
   }
 
-  async createDate(data: Pick<Guess, "id" | "date">) {
+  async createDate(data: GuessData) {
     try {
       await this.client.connect();
 
-      const { rows } = await this.client.queryObject<
-        Pick<Guess, "id" | "date">
-      >(CREATE_DATE, [data]);
+      const { rows } = await this.client.queryObject<GuessData>(CREATE_DATE, [
+        data.id,
+        data.date,
+        data.sex,
+      ]);
 
-      if (!rows.length ?? !rows[0]?.date) {
+      if (!rows[0]?.date) {
         throw new ServerError("Anlegen des Datums fehlgeschlagen.");
       }
 
@@ -390,15 +392,16 @@ export class Database {
     }
   }
 
-  async updateDate(data: Pick<Guess, "id" | "date">) {
+  async updateDate(data: GuessData) {
     try {
       await this.client.connect();
 
-      const { rows } = await this.client.queryObject<
-        Pick<Guess, "id" | "date">
-      >(UPDATE_DATE_BY_ID, [data]);
+      const { rows } = await this.client.queryObject<GuessData>(
+        UPDATE_DATE_BY_ID,
+        [data.id, data.date, data.sex],
+      );
 
-      if (!rows.length ?? !rows[0]?.date) {
+      if (!rows[0]?.date) {
         throw new ServerError("Ändern des Datums fehlgeschlagen.");
       }
 
@@ -418,11 +421,12 @@ export class Database {
     try {
       await this.client.connect();
 
-      const { rows } = await this.client.queryObject<
-        Pick<Guess, "id" | "date">
-      >(DELETE_DATE_BY_ID, [id]);
+      const { rows } = await this.client.queryObject<GuessData>(
+        DELETE_DATE_BY_ID,
+        [id],
+      );
 
-      if (!rows.length ?? !rows[0].date) {
+      if (!rows[0].date) {
         throw new ServerError("Löschen des Datums fehlgeschlagen.");
       }
 

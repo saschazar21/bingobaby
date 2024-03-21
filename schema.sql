@@ -21,11 +21,6 @@ CREATE TABLE IF NOT EXISTS users (
     name TEXT PRIMARY KEY
 );
 
-CREATE TABLE IF NOT EXISTS dates (
-    id TEXT PRIMARY KEY,
-    date TIMESTAMP WITHOUT TIME ZONE NOT NULL
-);
-
 CREATE TABLE IF NOT EXISTS browsers (
     user_agent TEXT PRIMARY KEY,
     name TEXT,
@@ -48,6 +43,14 @@ CREATE TABLE IF NOT EXISTS sessions (
 CREATE TABLE IF NOT EXISTS guesses (
     id TEXT PRIMARY KEY,
     name TEXT REFERENCES users(name) ON DELETE CASCADE NOT NULL,
+    date TIMESTAMP WITHOUT TIME ZONE NOT NULL,
+    sex sex NOT NULL,
+    created_at TIMESTAMP WITHOUT TIME ZONE DEFAULT (now() AT TIME ZONE 'utc'),
+    updated_at TIMESTAMP WITHOUT TIME ZONE
+);
+
+CREATE TABLE IF NOT EXISTS dates (
+    id TEXT PRIMARY KEY,
     date TIMESTAMP WITHOUT TIME ZONE NOT NULL,
     sex sex NOT NULL,
     created_at TIMESTAMP WITHOUT TIME ZONE DEFAULT (now() AT TIME ZONE 'utc'),
@@ -79,6 +82,12 @@ CREATE TRIGGER set_default_sessions_updated_at_trigger
 
 CREATE TRIGGER set_default_guesses_updated_at_trigger
     BEFORE INSERT ON guesses
+    FOR EACH ROW
+    WHEN (NEW.updated_at IS NULL)
+    EXECUTE FUNCTION set_default_updated_at();
+
+CREATE TRIGGER set_default_dates_updated_at_trigger
+    BEFORE INSERT ON dates
     FOR EACH ROW
     WHEN (NEW.updated_at IS NULL)
     EXECUTE FUNCTION set_default_updated_at();

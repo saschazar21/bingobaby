@@ -15,19 +15,26 @@ export const useLazyApi = (
   const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
 
-  const submit = useCallback(async (body: Record<string, string> | null) => {
-    setError(null);
-    setIsLoading(true);
+  const submit = useCallback(
+    async (
+      body: Record<string, string> | null,
+      headers?: Record<string, string>,
+    ) => {
+      setError(null);
+      setIsLoading(true);
 
-    return fetch(url, {
-      ...config,
-      body: body ? new URLSearchParams(body).toString() : body,
-      method,
-    })
-      .then((res) => res.json())
-      .catch((e) => setError((e as Error).message))
-      .finally(() => setIsLoading(false));
-  }, [method, url]);
+      return fetch(url, {
+        ...config,
+        ...(headers ? { headers: { ...config.headers, ...headers } } : {}),
+        body: body ? new URLSearchParams(body).toString() : body,
+        method,
+      })
+        .then((res) => res.json())
+        .catch((e) => setError((e as Error).message))
+        .finally(() => setIsLoading(false));
+    },
+    [method, url],
+  );
 
   return { error, isLoading, submit };
 };

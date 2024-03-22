@@ -1,0 +1,51 @@
+.container {
+  margin-top: var(--space-l);
+  padding-top: var(--space-xxl);
+  padding-bottom: var(--space-xxl);
+  background-color: var(--color-bg-special);
+}
+
+:where(.form, .buttons) {
+  --gap: var(--space-l);
+
+  display: flex;
+  justify-content: space-between;
+  gap: var(--gap);
+}
+
+.form {
+  position: relative;
+  flex-direction: column;
+  margin: 0 auto;
+  max-width: var(--container-width-s);
+}
+
+.buttons {
+  flex-direction: row;
+  flex-wrap: wrap-reverse;
+  max-width: 100%;
+}
+
+.buttons [type="submit"]:not([disabled]) {
+  --button-color: var(--color-bg-special);
+  --button-bg-color: var(--color-text-muted);
+  --border-color: var(--button-bg-color);
+}
+
+.buttons [type="reset"] {
+  --button-color: var(--color-text-muted);
+  --button-bg-color: var(--color-bg);
+  --border-color: var(--button-color);
+}
+
+@media screen and (min-width: 480px) {
+  .buttons {
+    flex-wrap: nowrap;
+  }
+}
+
+@media screen and (min-width: 840px) {
+  .container {
+    border-radius: var(--border-radius);
+  }
+}

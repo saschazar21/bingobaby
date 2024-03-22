@@ -1,0 +1,48 @@
+.wrapper {
+  --gap: var(--space-xl);
+
+  flex: 1 0 auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: var(--gap);
+  margin-top: var(--space-m);
+}
+
+.inputs {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap);
+}
+
+.radio {
+  flex: 1 0 calc(50% - var(--gap) * 0.5);
+  align-self: stretch;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-s);
+  min-height: 44px;
+  background-color: var(--color-bg);
+  color: var(--color-text);
+  font-weight: var(--font-weight-bold);
+  transition: background-color var(--duration) ease-in,
+    color var(--duration) ease-in, border-color var(--duration) ease-in,
+    opacity var(--duration) ease-in;
+}
+
+.radio[data-value="female"][data-checked="true"] {
+  --color-bg: var(--color-female-bg);
+  --color-text: var(--color-female-text);
+  --color-border: var(--color-text);
+}
+
+.radio[data-value="male"][data-checked="true"] {
+  --color-bg: var(--color-male-bg);
+  --color-text: var(--color-male-text);
+  --color-border: var(--color-text);
+}
+
+.radio > svg {
+  font-size: var(--fs-lg);
+}

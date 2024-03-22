@@ -9,8 +9,7 @@ import { validateAgainstPastDate } from "@/utils/validators";
 import { FormApi, FormState } from "informed";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 
-export interface GuessFormProps {
-}
+export interface GuessFormProps {}
 
 export const useGuessForm = () => {
   const dialogRef = useDialogContext();

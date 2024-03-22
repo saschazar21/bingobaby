@@ -1,5 +1,5 @@
 import { Database } from "@/deno/postgres";
-import { Guess } from "@/deno/postgres/types";
+import { GuessData } from "@/deno/postgres/types";
 import { ServerError } from "@/utils/error";
 import { getUser } from "@/utils/login";
 import { ActionFunction, json, LoaderFunction } from "@netlify/remix-runtime";
@@ -11,7 +11,7 @@ export const action: ActionFunction = async ({ request }) => {
     throw json({ error: "Method Not Allowed." }, {
       status: 405,
       headers: {
-        "allow": "GET, POST, HEAD",
+        allow: "GET, POST, HEAD",
       },
     });
   }
@@ -29,7 +29,7 @@ export const action: ActionFunction = async ({ request }) => {
 
   try {
     const guess = await db.createGuess({
-      ...Object.fromEntries(body) as Pick<Guess, "date" | "sex">,
+      ...Object.fromEntries(body) as Pick<GuessData, "date" | "sex">,
       name,
     });
 

@@ -16,9 +16,13 @@ import {
   useLoaderData,
 } from "@remix-run/react";
 import { Footer } from "@/components/Footer";
-import { BirthdateContext } from "@/contexts/BirthdateContext";
+import {
+  BirthdateContext,
+  BirthdateContextValue,
+} from "@/contexts/BirthdateContext";
 import { SessionContext } from "@/contexts/SessionContext";
 import { Database } from "@/deno/postgres";
+import { GuessData } from "./deno/postgres/types";
 import { BIRTHDATE } from "@/utils/constants";
 import { ONE_MINUTE, dateObject, lockDate } from "@/utils/day";
 import { destroySession, getSession } from "@/utils/session";
@@ -37,15 +41,15 @@ export const loader: LoaderFunction = async ({ request }) => {
 
   const db = new Database(process.env.POSTGRES_CONNECTION_STRING);
 
-  const birthdate: { id: string; date: string } | null = await db
+  const birthdate: GuessData | null = await db
     .getDate(BIRTHDATE)
     .catch(() => null);
 
   const values = {
     ENV: {
-      BIRTHDATE: birthdate?.date ?? null,
       CALCULATED_BIRTHDATE: process.env.CALCULATED_BIRTHDATE,
     },
+    birthdate,
   };
 
   if (!session.has("name")) {
@@ -88,10 +92,14 @@ export default function App() {
     };
   }, [data.ENV.CALCULATED_BIRTHDATE]);
 
-  const value = useMemo(
+  const value: BirthdateContextValue = useMemo(
     () => ({
-      ...(data.ENV.BIRTHDATE
-        ? { birthdate: dateObject(data.ENV.BIRTHDATE), isGameOver: true }
+      ...(data.birthdate?.date
+        ? {
+            birthdate: dateObject(data.birthdate.date),
+            isGameOver: true,
+            sex: data.birthdate.sex,
+          }
         : { isGameOver: false }),
       calculatedBirthdate: dateObject(data.ENV.CALCULATED_BIRTHDATE),
       isLockDateReached,

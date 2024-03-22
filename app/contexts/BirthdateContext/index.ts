@@ -7,6 +7,7 @@ export interface BirthdateContextValue {
   isGameOver: boolean;
   isLockDateReached: boolean;
   lockDate: Dayjs;
+  sex?: string;
 }
 
 export const BirthdateContext = createContext<BirthdateContextValue | null>(

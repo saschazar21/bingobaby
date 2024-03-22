@@ -1,17 +1,26 @@
 import { FieldProps, useField } from "informed";
-import { ChangeEventHandler, ReactNode, useCallback } from "react";
+import {
+  ChangeEventHandler,
+  ReactNode,
+  useCallback,
+  useId,
+  useMemo,
+} from "react";
 
 export interface UserProps {
   children: string | ReactNode | ReactNode[];
   className?: string;
-  id: string;
 }
 
 export const useRadio = (props: FieldProps<UserProps>) => {
-  const config = {
+  const id = useId();
+
+  const config = useMemo(() => ({
     type: "radio",
+    id,
     ...props,
-  };
+  }), [id, props]);
+
   const { fieldApi, fieldState, render, userProps } = useField<
     UserProps,
     string

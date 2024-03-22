@@ -1,20 +1,22 @@
 import { dateObject } from "@/utils/day";
 import { FieldProps, useField } from "informed";
-import { ChangeEventHandler, useCallback, useMemo } from "react";
+import { ChangeEventHandler, useCallback, useId, useMemo } from "react";
 
 export interface UserProps {
   className?: string;
-  id: string;
   label: string;
   placeholder?: string;
 }
 
 export const useDateTime = (props: FieldProps<UserProps>) => {
-  const config = {
+  const id = useId();
+
+  const config = useMemo(() => ({
     type: "datetime-local",
+    id,
     initialValue: "",
     ...props,
-  };
+  }), [id, props]);
 
   const { fieldApi, fieldState, render, userProps } = useField<
     UserProps,
@@ -43,6 +45,7 @@ export const useDateTime = (props: FieldProps<UserProps>) => {
   return {
     error,
     handleChange,
+    id,
     isErrorShown: showError,
     render,
     userProps,

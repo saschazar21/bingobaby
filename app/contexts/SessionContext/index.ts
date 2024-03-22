@@ -1,4 +1,4 @@
-import { Session } from "@/deno/postgres/queries/sessions";
+import { Session } from "@/deno/postgres/types";
 import { createContext, useContext } from "react";
 
 export const SessionContext = createContext<

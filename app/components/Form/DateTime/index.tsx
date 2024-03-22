@@ -7,16 +7,17 @@ import styles from "./DateTime.module.css";
 export interface DateTimeProps extends FieldProps<UserProps> {}
 
 export const DateTime: FC<DateTimeProps> = (props) => {
-  const { error, render, handleChange, isErrorShown, userProps, value } =
+  const { error, render, handleChange, id, isErrorShown, userProps, value } =
     useDateTime(props);
 
   const { label, ...rest } = userProps;
 
   return render(
-    <label className={styles.wrapper} htmlFor={props.id}>
+    <label className={styles.wrapper} htmlFor={id}>
       <span>{label}</span>
       <input
         className={styles.input}
+        id={id}
         {...rest}
         value={value as string}
         onChange={handleChange}

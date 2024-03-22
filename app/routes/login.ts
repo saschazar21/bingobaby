@@ -48,7 +48,7 @@ export const action: ActionFunction = async ({ request }) => {
         ],
         [
           "set-cookie",
-          await redirectCookie.serialize("", {
+          await redirectCookie.serialize(null, {
             expires: new Date(0),
             maxAge: 0,
           }),

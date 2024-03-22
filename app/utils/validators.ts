@@ -12,6 +12,14 @@ export const validateSegments = (name: string) => {
   }
 };
 
+export const validateAgainstFutureDate = (date: string) => {
+  if (
+    dateObject(date) > dateObject(new Date().toISOString())
+  ) {
+    throw new Error("Gewähltes Datum kann nicht in der Zukunft liegen.");
+  }
+};
+
 export const validateAgainstPastDate = (date: string) => {
   if (
     dateObject(date) < dateObject(new Date().toISOString())

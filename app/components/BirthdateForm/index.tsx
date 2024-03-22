@@ -10,22 +10,22 @@ import { DateTime } from "@/components/Form/DateTime";
 import { Hidden } from "@/components/Form/Hidden";
 import { Radio } from "@/components/Form/Radio";
 import { RadioGroup } from "@/components/Form/RadioGroup";
-import { GuessFormProps, useGuessForm } from "./useGuessForm";
+import { BirthdateFormProps, useBirthdateForm } from "./useBirthdateForm";
 
-import styles from "./GuessForm.module.css";
+import styles from "./BirthdateForm.module.css";
 
-export const GuessForm: FC<GuessFormProps> = () => {
+export const BirthdateForm: FC<BirthdateFormProps> = () => {
   const {
     action,
     formError,
-    guess,
+    data,
     handleErrorClose,
     handleSubmit,
     handleSubmitFailure,
     method,
     ref,
     validateDate,
-  } = useGuessForm();
+  } = useBirthdateForm();
 
   return (
     <Form
@@ -43,7 +43,7 @@ export const GuessForm: FC<GuessFormProps> = () => {
     >
       {formError ? <Error onClose={handleErrorClose}>{formError}</Error> : null}
       <div className={styles.inputs}>
-        <RadioGroup name="sex" label="Was wird es?">
+        <RadioGroup name="sex" label="Was ist es?">
           <Radio className={styles.radio} name="sex" value="female" required>
             <span>ein Mädchen</span>
             <PiGenderFemaleBold />
@@ -54,14 +54,14 @@ export const GuessForm: FC<GuessFormProps> = () => {
           </Radio>
         </RadioGroup>
         <DateTime
-          label="Wann kommt es auf die Welt?"
+          label="Wann ist es auf die Welt gekommen?"
           name="date"
           placeholder="Geburtszeitpunkt eingeben"
           validate={validateDate}
           required
         />
       </div>
-      {guess?.id ? <Hidden name="id" value={guess.id} /> : null}
+      {data?.id ? <Hidden name="id" value={data.id} /> : null}
       <button className={styles.submit} type="submit">
         <span>Abschicken</span> <PiCheckBold role="presentation" />
       </button>

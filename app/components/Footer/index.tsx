@@ -4,6 +4,7 @@ import {
   isAfterToday,
   relativeTimeTo,
   semanticDate,
+  semanticTimestamp,
 } from "@/utils/day";
 import { FC, useEffect, useMemo, useState } from "react";
 
@@ -41,9 +42,9 @@ export const Footer: FC = () => {
     }
     return [
       isAfterToday(calculatedBirthdate),
-      birthdate ? birthdate.toISOString() : null,
+      birthdate ? birthdate.format() : null,
       calculatedBirthdate.format("YYYY-MM-DD"),
-      birthdate ? birthdate.format("DD. MMMM YYYY [um] HH:mm [Uhr]") : null,
+      birthdate ? semanticTimestamp(birthdate) : null,
       semanticDate(calculatedBirthdate),
     ];
   }, [birthdate, calculatedBirthdate]);

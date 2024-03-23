@@ -22,10 +22,10 @@ import {
 } from "@/contexts/BirthdateContext";
 import { SessionContext } from "@/contexts/SessionContext";
 import { Database } from "@/deno/postgres";
-import { GuessData } from "./deno/postgres/types";
-import { BIRTHDATE } from "@/utils/constants";
+import { Guess, GuessData } from "@/deno/postgres/types";
 import { ONE_MINUTE, dateObject, lockDate } from "@/utils/day";
 import { destroySession, getSession } from "@/utils/session";
+import { BIRTHDATE } from "@/utils/types";
 
 import pkg from "../package.json";
 
@@ -45,11 +45,16 @@ export const loader: LoaderFunction = async ({ request }) => {
     .getDate(BIRTHDATE)
     .catch(() => null);
 
+  const winners: Pick<Guess, "name" | "date">[] = birthdate
+    ? await db.getWinningGuesses().catch(() => [])
+    : [];
+
   const values = {
     ENV: {
       CALCULATED_BIRTHDATE: process.env.CALCULATED_BIRTHDATE,
     },
     birthdate,
+    winners,
   };
 
   if (!session.has("name")) {
@@ -104,6 +109,7 @@ export default function App() {
       calculatedBirthdate: dateObject(data.ENV.CALCULATED_BIRTHDATE),
       isLockDateReached,
       lockDate: lockDate(data.ENV.CALCULATED_BIRTHDATE),
+      winners: data.winners,
     }),
     [data, isLockDateReached]
   );

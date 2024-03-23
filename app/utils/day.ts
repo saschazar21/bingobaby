@@ -29,10 +29,28 @@ export const semanticDate = (date: Dayjs) => {
   return date.format("D. MMMM YYYY");
 };
 
+export const semanticTimestamp = (date: Dayjs) => {
+  return date.format("DD. MMMM YYYY [um] HH:mm [Uhr]");
+};
+
 export const dateObject = (dateString: string) => {
   return dayjs(dateString).tz(DEFAULT_TIMEZONE);
 };
 
 export const lockDate = (dateString: string) => {
   return dayjs(dateString).utc().subtract(3, "weeks");
+};
+
+export const calculateOffset = (birthdate: Dayjs, guess: string) => {
+  const offsetHours = Math.abs(
+    dateObject(guess).diff(birthdate, "hours"),
+  );
+
+  if (offsetHours < 72) {
+    return `${offsetHours} Stunde${offsetHours > 1 ? "n" : ""}`;
+  }
+  const offsetDays = Math.abs(
+    dateObject(guess).diff(birthdate, "days", true),
+  );
+  return `ca. ${Math.round(offsetDays)} Tage`;
 };

@@ -7,11 +7,12 @@ import {
 import { useLazyApi } from "@/hooks/useApi";
 import { redirectCookie } from "@/utils/cookie";
 import { adminSession } from "@/utils/session";
+import { BIRTHDATE } from "@/utils/types";
 import { useLoaderData } from "@remix-run/react";
 import { LoaderFunction, json, redirect } from "@remix-run/server-runtime";
 import { FC, MouseEventHandler, useCallback, useMemo } from "react";
 import classNames from "clsx";
-import { ADMIN, BIRTHDATE } from "./api.birthdate";
+import { ADMIN } from "./api.birthdate";
 
 import styles from "./styles/es.ist.da.module.css";
 

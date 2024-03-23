@@ -13,7 +13,13 @@ import {
   PiGenderMaleBold,
   PiPenBold,
 } from "react-icons/pi";
-import { ONE_MINUTE, dateObject, relativeTimeTo } from "@/utils/day";
+import {
+  ONE_MINUTE,
+  calculateOffset,
+  dateObject,
+  relativeTimeTo,
+  semanticTimestamp,
+} from "@/utils/day";
 import { useGuessEditContext } from "@/contexts/GuessEditContext";
 import { BirthdateContext } from "@/contexts/BirthdateContext";
 
@@ -61,7 +67,7 @@ export const GuessTableEntry: FC<GuessTableEntryProps> = ({
   const formattedDate = useMemo(
     () => (
       <time dateTime={dateObject(guess.date).format()}>
-        {dateObject(guess.date).format("DD. MMMM YYYY [um] HH:mm [Uhr]")}
+        {semanticTimestamp(dateObject(guess.date))}
       </time>
     ),
     [guess.date]
@@ -89,17 +95,7 @@ export const GuessTableEntry: FC<GuessTableEntryProps> = ({
       return null;
     }
 
-    const offsetHours = Math.abs(
-      dateObject(guess.date).diff(birthdateContext?.birthdate, "hours")
-    );
-
-    if (offsetHours < 72) {
-      return `${offsetHours} Stunde${offsetHours > 1 ? "n" : ""}`;
-    }
-    const offsetDays = Math.abs(
-      dateObject(guess.date).diff(birthdateContext?.birthdate, "days", true)
-    );
-    return `ca. ${Math.round(offsetDays)} Tage`;
+    return calculateOffset(birthdateContext.birthdate, guess.date);
   }, [birthdateContext?.birthdate, guess.date]);
 
   const className = classNames(customClassName, {
@@ -119,9 +115,7 @@ export const GuessTableEntry: FC<GuessTableEntryProps> = ({
           {lastUpdatedAt}
         </time>
         <time dateTime={guess.updated_at} data-print-only>
-          {dateObject(guess.updated_at).format(
-            "DD. MMMM YYYY [um] HH:mm [Uhr]"
-          )}
+          {semanticTimestamp(dateObject(guess.updated_at))}
         </time>
       </div>
       {!birthdateContext?.isGameOver ? (

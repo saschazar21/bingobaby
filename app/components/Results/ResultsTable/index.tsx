@@ -27,7 +27,12 @@ export const ResultsTable: FC<ResultsTableProps> = () => {
     }
 
     return data.map(({ name, date, offset }, i) => (
-      <div key={date.format()} className={styles.row} role="row">
+      <div
+        key={date.format()}
+        className={styles.row}
+        role="row"
+        data-place={i + 1}
+      >
         <div role="cell">
           {i === 0 ? <PiTrophyBold title="Sieger" /> : <span>{i + 1}.</span>}
         </div>
@@ -40,7 +45,13 @@ export const ResultsTable: FC<ResultsTableProps> = () => {
           </time>
         </div>
         <div role="cell">
-          <span>{offset}</span>
+          <span>
+            <b data-subheader>
+              Abweichung:
+              <br />
+            </b>
+            {offset}
+          </span>
         </div>
       </div>
     ));
@@ -49,11 +60,11 @@ export const ResultsTable: FC<ResultsTableProps> = () => {
   return (
     <div className={styles.table} role="table" aria-label="Resultate">
       <div className={styles.row} role="row">
-        <div role="columnheader">Platzierung</div>
+        <div role="columnheader">Platz</div>
         <div role="columnheader">Name</div>
         <div role="columnheader">Schätzung</div>
-        <div role="columnheader" aria-sort="descending">
-          Unterschied
+        <div role="columnheader" aria-sort="descending" data-offset>
+          Abweichung
         </div>
       </div>
       {rows}

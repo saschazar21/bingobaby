@@ -16,10 +16,12 @@ import {
   useLoaderData,
 } from "@remix-run/react";
 import { Footer } from "@/components/Footer";
+import { ResultsModal } from "@/components/Results/ResultsModal";
 import {
   BirthdateContext,
   BirthdateContextValue,
 } from "@/contexts/BirthdateContext";
+import { PubSubContextProvider } from "@/contexts/PubSubContext";
 import { SessionContext } from "@/contexts/SessionContext";
 import { Database } from "@/deno/postgres";
 import { Guess, GuessData } from "@/deno/postgres/types";
@@ -169,8 +171,11 @@ export default function App() {
       <body>
         <SessionContext.Provider value={data?.session ?? null}>
           <BirthdateContext.Provider value={value}>
-            <Outlet />
-            <Footer />
+            <PubSubContextProvider>
+              <Outlet />
+              <Footer />
+              {value.isGameOver && <ResultsModal />}
+            </PubSubContextProvider>
           </BirthdateContext.Provider>
         </SessionContext.Provider>
         <ScrollRestoration />

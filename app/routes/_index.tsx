@@ -12,6 +12,7 @@ import {
 import { CircleIcon } from "@/components/CircleIcon";
 import { Header } from "@/components/Header";
 import { LoginForm } from "@/components/LoginForm";
+import { ResultsBanner } from "@/components/Results/ResultsBanner";
 import { UserInfo } from "@/components/UserInfo";
 import { useBirthDateContext } from "@/contexts/BirthdateContext";
 import { LoginContextProvider } from "@/contexts/LoginContext";
@@ -52,6 +53,7 @@ const Index: FC = () => {
       <main>
         <h1>{pkg.short_name}</h1>
         <p className="lead">{pkg.description}</p>
+        {date?.isGameOver && <ResultsBanner />}
         <p>
           Jede/r Teilnehmer/in kann <b>bis zu 3 Schätzungen</b> abgeben. Die
           Kombination aus erratenem Geschlecht und dem am nächsten kommenden

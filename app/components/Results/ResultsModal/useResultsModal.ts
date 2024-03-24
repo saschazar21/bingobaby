@@ -9,7 +9,7 @@ export const useResultsModal = () => {
   const canvas = useRef<HTMLCanvasElement>(null);
   const ref = useRef<HTMLDialogElement>(null);
   const pubSub = usePubSubContext();
-  const [isCanvasShown, setIsCanvasShown] = useState(true);
+  const [isCanvasShown, setIsCanvasShown] = useState(false);
 
   const fireConfetti = useCallback(() => {
     if (canvas.current) {
@@ -39,7 +39,7 @@ export const useResultsModal = () => {
       el.height = height;
       el.width = width;
     }
-  }, []);
+  }, [isCanvasShown]);
 
   useEffect(() => {
     let timeout: NodeJS.Timeout;
@@ -53,10 +53,13 @@ export const useResultsModal = () => {
 
   useEffect(() => {
     const hasBeenShown = localStorage.getItem(RESULTS_HAVE_BEEN_SHOWN);
-    if (hasBeenShown !== "false") {
-      setIsCanvasShown(true);
-      ref.current?.showModal();
+    if (hasBeenShown !== "true") {
       localStorage.setItem(RESULTS_HAVE_BEEN_SHOWN, "true");
+
+      if (ref.current) {
+        !ref.current.open && ref.current.showModal();
+        setIsCanvasShown(true);
+      }
     }
   }, []);
 

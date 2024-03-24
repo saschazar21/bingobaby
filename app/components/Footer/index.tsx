@@ -57,7 +57,7 @@ export const Footer: FC = () => {
           <time dateTime={birthdateString}>
             <b>{semanticBirthdate}</b>
           </time>{" "}
-          geboren. 🎉😍 Danke für eure Teilnahme am Schätzspiel!
+          geboren. 🎉😍 Danke für deine Teilnahme am Schätzspiel!
         </span>
       );
     }

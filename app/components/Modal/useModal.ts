@@ -15,10 +15,10 @@ export const useModal = (ref: RefObject<HTMLDialogElement>) => {
   const handleOpen = useCallback((value?: string) => {
     switch (value) {
       case DIALOG_ACTIONS.OPEN:
-        ref.current?.showModal();
+        !ref.current?.open && ref.current?.showModal();
         break;
       case DIALOG_ACTIONS.CLOSE:
-        ref.current?.close();
+        ref.current?.open && ref.current?.close();
         break;
     }
   }, [ref]);

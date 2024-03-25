@@ -39,7 +39,6 @@ export const links: LinksFunction = () => [
 ];
 
 export const loader: LoaderFunction = async ({ request }) => {
-  const { origin } = new URL(request.url);
   const session = await getSession(request.headers.get("cookie"));
 
   const db = new Database(process.env.POSTGRES_CONNECTION_STRING);
@@ -70,7 +69,7 @@ export const loader: LoaderFunction = async ({ request }) => {
 
   const { data } = session;
 
-  return { session: data, origin, ...values };
+  return { session: data, ...values };
 };
 
 export const meta: MetaFunction = () => [
@@ -175,7 +174,10 @@ export default function App() {
           property="og:description"
           content="Wann kommt das Baby? Und was wird es? Melde dich an und rate mit!"
         />
-        <meta property="og:image" content={data.origin + "/social.jpg"} />
+        <meta
+          property="og:image"
+          content="https://bingobaby.sascha.app/social.jpg"
+        />
 
         {/* <!-- Twitter Meta Tags --> */}
         <meta name="twitter:card" content="summary_large_image" />
@@ -186,7 +188,10 @@ export default function App() {
           name="twitter:description"
           content="Wann kommt das Baby? Und was wird es? Melde dich an und rate mit!"
         />
-        <meta name="twitter:image" content={data.origin + "/social.jpg"} />
+        <meta
+          name="twitter:image"
+          content="https://bingobaby.sascha.app/social.jpg"
+        />
 
         <Meta />
         <Links />

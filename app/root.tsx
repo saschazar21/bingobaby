@@ -165,6 +165,28 @@ export default function App() {
         <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#00667a" />
         <meta name="msapplication-TileColor" content={pkg.color} />
         <meta name="theme-color" content={pkg.color} />
+
+        {/* <!-- Facebook Meta Tags --> */}
+        <meta property="og:url" content="https://bingobaby.sascha.app" />
+        <meta property="og:type" content="website" />
+        <meta property="og:title" content="Bingo, Baby" />
+        <meta
+          property="og:description"
+          content="Wann kommt das Baby? Und was wird es? Melde dich an und rate mit!"
+        />
+        <meta property="og:image" content="/social.jpg" />
+
+        {/* <!-- Twitter Meta Tags --> */}
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta property="twitter:domain" content="bingobaby.sascha.app" />
+        <meta property="twitter:url" content="https://bingobaby.sascha.app" />
+        <meta name="twitter:title" content="Bingo, Baby" />
+        <meta
+          name="twitter:description"
+          content="Wann kommt das Baby? Und was wird es? Melde dich an und rate mit!"
+        />
+        <meta name="twitter:image" content="/social.jpg" />
+
         <Meta />
         <Links />
       </head>

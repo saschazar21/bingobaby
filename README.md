@@ -9,6 +9,10 @@
   <br />
   <br />
   <br />
+  <img src="public/social.jpg" alt="A screenshot of the index page, showing the header section consisting of an image still of the baby from the Dinosaurs series and a login form, as well as the headline reading Bingo, Baby and a subtext">
+  <br />
+  <br />
+  <br />
 </div>
 
 ## What is it?

@@ -31,6 +31,15 @@ SELECT
 FROM ${GUESSES};
 `;
 
+export const CLOSEST_GUESSES_BY_SEX = `
+SELECT
+  ${filterSelectColumns(["name", "date"])}
+FROM ${GUESSES}
+WHERE ${GUESSES}.sex = $2
+ORDER BY ABS(EXTRACT(EPOCH FROM ${GUESSES}.date - $1))
+LIMIT 3;
+`;
+
 export const VALID_GUESSES = `
 SELECT 
   ${filterSelectColumns(["date", "sex"]).join(", ")} 

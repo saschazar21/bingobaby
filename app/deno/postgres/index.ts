@@ -9,6 +9,7 @@ import {
   UPDATE_DATE_BY_ID,
 } from "./queries/dates.ts";
 import {
+  CLOSEST_GUESSES_BY_SEX,
   CREATE_GUESS,
   DELETE_GUESS_BY_ID,
   GUESS_BY_ID,
@@ -34,6 +35,7 @@ import { dateObject, LOCK_DATE } from "./utils.ts";
 import { Browser } from "../../utils/browser.ts";
 import { MAX_GUESSES } from "../../utils/constants.ts";
 import { SERVER_ERROR, ServerError } from "../../utils/error.ts";
+import { BIRTHDATE } from "../../utils/types.ts";
 
 export class Database {
   private client: Client;
@@ -83,6 +85,39 @@ export class Database {
       throw (e.name === SERVER_ERROR)
         ? e
         : new ServerError("Fehler beim Abrufen der Schätzungen.");
+    } finally {
+      await this.client.end();
+    }
+  }
+
+  async getWinningGuesses() {
+    try {
+      await this.client.connect();
+
+      const { rows: datesRow } = await this.client.queryObject<GuessData>(
+        DATE_BY_ID,
+        [BIRTHDATE],
+      );
+
+      if (!datesRow[0]?.date) {
+        throw new ServerError(
+          "Kein Geburtsdatum verfügbar, dadurch keine Auswertung möglich.",
+        );
+      }
+
+      const { date, sex } = datesRow[0];
+
+      const { rows } = await this.client.queryObject<
+        Pick<Guess, "name" | "date">
+      >(CLOSEST_GUESSES_BY_SEX, [date, sex]);
+
+      return rows;
+    } catch (e) {
+      console.error(e);
+
+      throw (e.name === SERVER_ERROR)
+        ? e
+        : new ServerError("Fehler beim Abrufen der Auswertung.");
     } finally {
       await this.client.end();
     }

@@ -1,3 +1,4 @@
+import { Guess } from "@/deno/postgres/types";
 import { Dayjs } from "dayjs";
 import { createContext, useContext } from "react";
 
@@ -8,6 +9,7 @@ export interface BirthdateContextValue {
   isLockDateReached: boolean;
   lockDate: Dayjs;
   sex?: string;
+  winners: Pick<Guess, "name" | "date">[];
 }
 
 export const BirthdateContext = createContext<BirthdateContextValue | null>(

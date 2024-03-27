@@ -14,6 +14,7 @@ import { useLoaderData } from "@remix-run/react";
 import { FC, useContext, useEffect, useState } from "react";
 
 import styles from "./styles/mitspielen.module.css";
+import { ResultsBanner } from "@/components/Results/ResultsBanner";
 
 export const loader: LoaderFunction = async ({ request }) => {
   const name = await ensureLoggedIn(request);
@@ -67,6 +68,7 @@ const Info: FC = () => {
     return (
       <>
         <p className="lead">Das Spiel ist aus. Danke für deine Teilnahme!</p>
+        <ResultsBanner />
         <p>
           Hier siehst du deine Schätzungen, die für die Wertung herangezogen
           wurden:

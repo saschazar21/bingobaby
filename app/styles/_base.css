@@ -11,6 +11,7 @@
   --color-bg: var(--baby-powder);
   --color-bg-muted: var(--antiflash-white);
   --color-bg-special: var(--saffron);
+  --color-bg-special-light: hsla(44, 88%, 86%, 1);
   --color-alert: var(--engineering-orange);
   --color-text: var(--eerie-black);
   --color-text-muted: var(--jet);
@@ -21,6 +22,10 @@
   --color-male-bg: hsla(190, 100%, 92%, 1);
   --color-male-text: hsla(190, 100%, 24%, 1);
 
+  --color-place-1: var(--color-bg-special-light);
+  --color-place-2: var(--color-bg-muted);
+  --color-place-3: hsla(15, 84%, 92%, 1);
+
   --space-xs: 0.25rem;
   --space-s: 0.5rem;
   --space-m: 1rem;
@@ -30,6 +35,7 @@
 
   --container-width-xs: 256px;
   --container-width-s: 480px;
+  --container-width-m: 640px;
   --container-width: 860px;
 
   --border-radius: 8px;
@@ -37,6 +43,19 @@
 
   --duration: 300ms;
   --animation-duration: 400ms;
+
+  --scrollbar-width: var(--space-s);
+}
+
+@media (prefers-reduced-motion) {
+  :root {
+    --duration: 0;
+    --animation-duration: 0;
+  }
+}
+
+html:has(dialog[open]) {
+  overflow: hidden;
 }
 
 body {
@@ -71,10 +90,6 @@ body,
   max-width: var(--container-width);
 }
 
-body:has(dialog[open]) {
-  overflow: hidden;
-}
-
 main {
   flex: 1 0 auto;
 }
@@ -82,6 +97,24 @@ main {
 video {
   display: block;
   max-width: 100%;
+}
+
+::-webkit-scrollbar {
+  width: var(--scrollbar-width);
+}
+
+::-webkit-scrollbar-button {
+  background-color: transparent;
+  height: 0;
+}
+
+::-webkit-scrollbar-thumb {
+  border-radius: var(--border-radius);
+  background-color: var(--color-text-muted);
+}
+
+::-webkit-scrollbar-track {
+  background-color: transparent;
 }
 
 [data-full-bleed] {
@@ -106,6 +139,10 @@ video {
 }
 
 @media screen and (min-width: 860px) {
+  html:has(dialog[open]) {
+    margin-right: var(--scrollbar-width);
+  }
+
   body,
   .container {
     --padding: 0;

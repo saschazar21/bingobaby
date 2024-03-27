@@ -16,16 +16,18 @@ import {
   useLoaderData,
 } from "@remix-run/react";
 import { Footer } from "@/components/Footer";
+import { ResultsModal } from "@/components/Results/ResultsModal";
 import {
   BirthdateContext,
   BirthdateContextValue,
 } from "@/contexts/BirthdateContext";
+import { PubSubContextProvider } from "@/contexts/PubSubContext";
 import { SessionContext } from "@/contexts/SessionContext";
 import { Database } from "@/deno/postgres";
-import { GuessData } from "./deno/postgres/types";
-import { BIRTHDATE } from "@/utils/constants";
+import { Guess, GuessData } from "@/deno/postgres/types";
 import { ONE_MINUTE, dateObject, lockDate } from "@/utils/day";
 import { destroySession, getSession } from "@/utils/session";
+import { BIRTHDATE } from "@/utils/types";
 
 import pkg from "../package.json";
 
@@ -45,11 +47,16 @@ export const loader: LoaderFunction = async ({ request }) => {
     .getDate(BIRTHDATE)
     .catch(() => null);
 
+  const winners: Pick<Guess, "name" | "date">[] = birthdate
+    ? await db.getWinningGuesses().catch(() => [])
+    : [];
+
   const values = {
     ENV: {
       CALCULATED_BIRTHDATE: process.env.CALCULATED_BIRTHDATE,
     },
     birthdate,
+    winners,
   };
 
   if (!session.has("name")) {
@@ -104,6 +111,7 @@ export default function App() {
       calculatedBirthdate: dateObject(data.ENV.CALCULATED_BIRTHDATE),
       isLockDateReached,
       lockDate: lockDate(data.ENV.CALCULATED_BIRTHDATE),
+      winners: data.winners,
     }),
     [data, isLockDateReached]
   );
@@ -157,14 +165,45 @@ export default function App() {
         <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#00667a" />
         <meta name="msapplication-TileColor" content={pkg.color} />
         <meta name="theme-color" content={pkg.color} />
+
+        {/* <!-- Facebook Meta Tags --> */}
+        <meta property="og:url" content="https://bingobaby.sascha.app" />
+        <meta property="og:type" content="website" />
+        <meta property="og:title" content="Bingo, Baby" />
+        <meta
+          property="og:description"
+          content="Wann kommt das Baby? Und was wird es? Melde dich an und rate mit!"
+        />
+        <meta
+          property="og:image"
+          content="https://bingobaby.sascha.app/social.jpg"
+        />
+
+        {/* <!-- Twitter Meta Tags --> */}
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta property="twitter:domain" content="bingobaby.sascha.app" />
+        <meta property="twitter:url" content="https://bingobaby.sascha.app" />
+        <meta name="twitter:title" content="Bingo, Baby" />
+        <meta
+          name="twitter:description"
+          content="Wann kommt das Baby? Und was wird es? Melde dich an und rate mit!"
+        />
+        <meta
+          name="twitter:image"
+          content="https://bingobaby.sascha.app/social.jpg"
+        />
+
         <Meta />
         <Links />
       </head>
       <body>
         <SessionContext.Provider value={data?.session ?? null}>
           <BirthdateContext.Provider value={value}>
-            <Outlet />
-            <Footer />
+            <PubSubContextProvider>
+              <Outlet />
+              <Footer />
+              {value.isGameOver && <ResultsModal />}
+            </PubSubContextProvider>
           </BirthdateContext.Provider>
         </SessionContext.Provider>
         <ScrollRestoration />

@@ -54,6 +54,10 @@
   }
 }
 
+html:has(dialog[open]) {
+  overflow: hidden;
+}
+
 body {
   display: flex;
   flex-direction: column;
@@ -84,11 +88,6 @@ body,
   margin-right: auto;
   padding: 0 var(--padding);
   max-width: var(--container-width);
-}
-
-html:has(dialog[open]) {
-  margin-right: var(--scrollbar-width);
-  overflow: hidden;
 }
 
 main {
@@ -140,6 +139,10 @@ video {
 }
 
 @media screen and (min-width: 860px) {
+  html:has(dialog[open]) {
+    margin-right: var(--scrollbar-width);
+  }
+
   body,
   .container {
     --padding: 0;

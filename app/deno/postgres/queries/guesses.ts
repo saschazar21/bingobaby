@@ -20,7 +20,7 @@ const filterSelectColumns = (filter: string[] = []) =>
 
 export const ALL_GUESSES = `
 SELECT
-  ${filterSelectColumns(excludeColumns([])).join(", ")}
+  ${filterSelectColumns(excludeColumns(["id", "name"])).join(", ")}
 FROM ${GUESSES}
 ORDER BY ${GUESSES}.date ASC;
 `;

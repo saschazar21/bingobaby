@@ -9,6 +9,7 @@ import {
   UPDATE_DATE_BY_ID,
 } from "./queries/dates.ts";
 import {
+  ALL_GUESSES,
   CLOSEST_GUESSES_BY_SEX,
   CREATE_GUESS,
   DELETE_GUESS_BY_ID,
@@ -65,6 +66,22 @@ export class Database {
       console.error(e);
 
       throw new ServerError("Fehler beim Abrufen der Schätzung.");
+    } finally {
+      await this.client.end();
+    }
+  }
+
+  async getAllGuesses() {
+    try {
+      await this.client.connect();
+
+      const { rows } = await this.client.queryObject<Omit<Guess, "id" | "name">>(ALL_GUESSES);
+
+      return rows;
+    } catch (e) {
+      console.error(e);
+
+      throw new ServerError("Fehler beim Abrufen der Schätzungen.");
     } finally {
       await this.client.end();
     }

@@ -1,7 +1,7 @@
 import { useBirthdateEditContext } from "@/contexts/BirthdateEditContext";
 import { GuessData } from "@/deno/postgres/types";
 import { useLazyApi } from "@/hooks/useApi";
-import { BIRTHDATE } from "@/routes/api.birthdate";
+import { BIRTHDATE } from "@/utils/types";
 import { validateAgainstFutureDate } from "@/utils/validators";
 import { FormApi, FormState } from "informed";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";

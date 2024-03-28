@@ -27,7 +27,6 @@
   padding: 0;
   left: 0;
   bottom: 0;
-  max-height: 75vh;
   min-height: 61.8vh;
   width: 100vw;
   min-width: 100vw;
@@ -59,10 +58,16 @@
   flex: 1 0 auto;
   border-radius: inherit;
   background-color: var(--color-bg);
+  max-height: 65vh;
+  overflow-y: auto;
 }
 
 .heading {
   font-size: var(--fs-lg);
+}
+
+.header button {
+  z-index: 10;
 }
 
 @media screen and (min-width: 640px) {
@@ -73,7 +78,7 @@
     left: 50%;
     min-height: 50vh;
     min-width: unset;
-    max-width: 640px;
+    max-width: var(--container-width-m);
     transform: translateX(-50%) translateY(50%);
   }
 

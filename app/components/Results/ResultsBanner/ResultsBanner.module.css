@@ -1,0 +1,33 @@
+.container {
+  --color-bg: var(--color-bg-special);
+  --button-color: var(--color-bg);
+  --button-bg-color: var(--color-text-muted);
+  --border-color: var(--button-bg-color);
+  --space: var(--space-xxl);
+
+  margin-top: var(--space);
+  margin-bottom: var(--space);
+  background-color: var(--color-bg);
+}
+
+.content {
+  --gap: var(--space-l);
+
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap);
+  margin: 0 auto;
+  padding-top: var(--space);
+  padding-bottom: var(--space);
+  max-width: var(--container-width-s);
+}
+
+.content h2 {
+  font-size: var(--fs-lg);
+}
+
+@media screen and (min-width: 860px) {
+  .container {
+    border-radius: var(--border-radius);
+  }
+}

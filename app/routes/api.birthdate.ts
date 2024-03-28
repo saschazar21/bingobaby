@@ -2,6 +2,7 @@ import { Database } from "@/deno/postgres";
 import { GuessData } from "@/deno/postgres/types";
 import { ServerError } from "@/utils/error";
 import { validateBasicAuth } from "@/utils/login";
+import { BIRTHDATE } from "@/utils/types";
 import {
   ActionFunction,
   json,
@@ -9,7 +10,6 @@ import {
 } from "@remix-run/server-runtime";
 
 export const ADMIN = "admin";
-export const BIRTHDATE = "birthdate";
 
 const parseBody = async (request: Request): Promise<GuessData> => {
   const body = await request.formData();

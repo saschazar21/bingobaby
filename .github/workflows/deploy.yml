@@ -31,7 +31,7 @@ jobs:
         id: vars
         run: |
           SHORT_SHA=$(git rev-parse --short HEAD)
-          COMMIT_MESSAGE=$(git log -1 --no-merges --pretty=%B)
+          COMMIT_MESSAGE=$(git log -1 --no-merges --pretty=%s)
           echo "SHORT_SHA=$SHORT_SHA" >> $GITHUB_OUTPUT
           echo "COMMIT_MESSAGE=$COMMIT_MESSAGE" >> $GITHUB_OUTPUT
           echo $SHORT_SHA $COMMIT_MESSAGE

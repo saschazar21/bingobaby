@@ -90,8 +90,8 @@ const Arc: FC<ArcProps> = (arc) => {
 const DONUT_THICKNESS_FACTOR = 0.5;
 
 const DEFAULT_DISTRIBUTION = [
-  { sex: "Mädchen", count: 2 },
-  { sex: "Bub", count: 3 },
+  { sex: "Mädchen", count: 0 },
+  { sex: "Bub", count: 0 },
 ];
 
 export const Pie: FC<PieProps> = () => {

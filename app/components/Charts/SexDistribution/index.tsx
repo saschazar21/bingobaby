@@ -1,26 +1,40 @@
-import { useGuessContext } from "@/contexts/GuessContext";
-import { FC, useMemo } from "react";
+import { FC, useCallback, useEffect, useRef, useState } from "react";
+import { Pie, SizeContext } from "./Pie";
+
+import styles from "./SexDistribution.module.css";
 
 export interface SexDistributionProps {}
 
-const DONUT_THICKNESS = 50;
-
 export const SexDistribution: FC<SexDistributionProps> = () => {
-  const data = useGuessContext();
+  const ref = useRef<HTMLDivElement>(null);
+  const [size, setSize] = useState({ height: 256, width: 256 });
 
-  const distribution = useMemo(
-    () =>
-      data?.state.guesses.reduce(
-        (obj, guess) => {
-          return {
-            female: guess.sex === "female" ? obj.female + 1 : obj.female,
-            male: guess.sex === "male" ? obj.male + 1 : obj.male,
-          };
-        },
-        { female: 0, male: 0 }
-      ),
-    [data?.state.guesses]
+  const resize = useCallback(() => {
+    if (ref) {
+      const { width, height } = ref.current?.getBoundingClientRect() ?? {
+        height: 256,
+        width: 256,
+      };
+      setSize({ height, width });
+    }
+  }, []);
+
+  useEffect(() => {
+    typeof window !== "undefined" && window.addEventListener("resize", resize);
+    resize();
+    return () => {
+      typeof window !== "undefined" &&
+        window.removeEventListener("resize", resize);
+    };
+  }, [resize]);
+
+  return (
+    <SizeContext.Provider value={size}>
+      <div className={styles.container} ref={ref}>
+        <svg height={size.height} width={size.width}>
+          <Pie />
+        </svg>
+      </div>
+    </SizeContext.Provider>
   );
-
-  return <div />;
 };

@@ -6,6 +6,8 @@ import { Link, useLoaderData } from "@remix-run/react";
 import { LoaderFunction, json } from "@remix-run/server-runtime";
 import { FC } from "react";
 
+import styles from "./styles/statistik.module.css";
+
 export const loader: LoaderFunction = async () => {
   try {
     const db = new Database(process.env.POSTGRES_CONNECTION_STRING);
@@ -31,7 +33,9 @@ const Statistik: FC = () => {
       <main>
         <h1>Statistik</h1>
         <GuessContextProvider guesses={data.guesses} maxGuesses={0}>
-          <SexDistribution />
+          <div className={styles.container}>
+            <SexDistribution />
+          </div>
         </GuessContextProvider>
       </main>
     </>
